@@ -1,0 +1,14 @@
+{
+  "name": "inventory-app",
+  "version": "1.0.0",
+  "scripts": {
+    "install-all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev": "concurrently \"cd backend && nodemon server.js\" \"cd frontend && npx vite --port 3000\"",
+    "start-backend": "cd backend && node server.js",
+    "start-frontend": "cd frontend && npx vite --port 3000",
+    "seed": "cd backend && node seed.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
