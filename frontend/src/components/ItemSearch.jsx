@@ -98,7 +98,7 @@ export default function ItemSearch({ itemOptions = [] }) {
     if (!q) return;
     setLoading(true); setError(''); setResult(null); setShowSugg(false);
     try {
-      const res = await api.get(`/tables/search/${encodeURIComponent(q)}`);
+      const res = await api.post(`/tables/search`, { item_number: q });
       setResult(res.data);
     } catch(e) {
       setError(e.response?.data?.message || 'Search failed');

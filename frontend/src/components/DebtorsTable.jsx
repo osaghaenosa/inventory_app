@@ -118,7 +118,7 @@ function AddDebtorForm({ itemOptions, onSave, onCancel, saving }) {
   useEffect(() => {
     if (!f.item_number.trim()) { setStockInfo(null); return; }
     const t = setTimeout(() => {
-      api.get(`/tables/stockcheck/${encodeURIComponent(f.item_number.trim())}`)
+      api.post(`/tables/stockcheck`, { item_number: f.item_number.trim() })
         .then(r => setStockInfo(r.data)).catch(() => setStockInfo(null));
     }, 400);
     return () => clearTimeout(t);

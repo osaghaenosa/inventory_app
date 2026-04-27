@@ -9,6 +9,10 @@ function today() {
   return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
 }
 
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
 function emitUpdate(req, table, action, worker) {
   try {
     const io = req.app.get('io');
@@ -31,7 +35,7 @@ async function logActivity(userId, action, data) {
  */
 async function findInStockItem(item_number) {
   return await InStock.findOne({
-    item_number: { $regex: new RegExp(`^${item_number.trim()}$`, 'i') }
+    item_number: { $regex: new RegExp(`^${escapeRegExp(item_number.trim())}$`, 'i') }
   });
 }
 
@@ -608,7 +612,7 @@ router.post('/restockitem', auth, async (req, res) => {
     const itemNum = item_number.trim();
 
     // 1. Update or create RestockItem
-    let restockExisting = await RestockItem.findOne({ item_number: { $regex: new RegExp(`^${itemNum}$`, 'i') } });
+    let restockExisting = await RestockItem.findOne({ item_number: { $regex: new RegExp(`^${escapeRegExp(itemNum)}$`, 'i') } });
     let restockRecord;
     if (restockExisting) {
       restockExisting.quantity += qty;
@@ -673,9 +677,10 @@ router.get('/items', auth, async (req, res) => {
 
 // ─── STOCK LOOKUP (for frontend to show current qty when selecting item) ──────
 
-router.get('/stockcheck/:item_number', auth, async (req, res) => {
+router.post('/stockcheck', auth, async (req, res) => {
   try {
-    const item = await findInStockItem(req.params.item_number);
+    const itemNum = req.body.item_number;
+    const item = await findInStockItem(itemNum);
     if (!item) return res.json({ found: false, quantity: 0 });
     res.json({ found: true, quantity: item.quantity, price: item.price, item_number: item.item_number });
   } catch(e) { res.status(500).json({ message: e.message }); }
@@ -683,10 +688,10 @@ router.get('/stockcheck/:item_number', auth, async (req, res) => {
 
 
 // ─── ITEM SEARCH (full profile) ───────────────────────────────────────────────
-router.get('/search/:item_number', auth, async (req, res) => {
+router.post('/search', auth, async (req, res) => {
   try {
-    const itemNum = req.params.item_number.trim();
-    const regex = new RegExp(`^${itemNum}$`, 'i');
+    const itemNum = req.body.item_number.trim();
+    const regex = new RegExp(`^${escapeRegExp(itemNum)}$`, 'i');
     const isAdmin = req.user.role === 'admin';
     const workerFilter = isAdmin ? {} : { worker_id: req.user._id };
 

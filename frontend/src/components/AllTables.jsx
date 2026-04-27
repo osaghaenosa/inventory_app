@@ -38,9 +38,13 @@ function useStockCheck(itemNumber) {
   const [stock, setStock] = useState(null);
   useEffect(() => {
     if (!itemNumber || itemNumber.trim() === '') { setStock(null); return; }
-    const t = setTimeout(() => {
-      api.get(`/tables/stockcheck/${encodeURIComponent(itemNumber.trim())}`)
-        .then(r => setStock(r.data)).catch(() => setStock(null));
+    const t = setTimeout(async () => {
+      try {
+        const { data } = await api.post(`/tables/stockcheck`, { item_number: itemNumber.trim() });
+        setStock(data);
+      } catch {
+        setStock(null);
+      }
     }, 400);
     return () => clearTimeout(t);
   }, [itemNumber]);
