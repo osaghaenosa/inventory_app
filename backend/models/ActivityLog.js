@@ -26,4 +26,12 @@ const activityLogSchema = new mongoose.Schema({
   }
 });
 
+const { generatePushNotification } = require('../services/notificationService');
+
+activityLogSchema.post('save', function(doc) {
+  if (global.io) {
+    generatePushNotification(doc, global.io);
+  }
+});
+
 module.exports = mongoose.model('ActivityLog', activityLogSchema);

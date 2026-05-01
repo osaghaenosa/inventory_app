@@ -26,6 +26,7 @@ const activityRoutes = require('./routes/activity');
 const userRoutes = require('./routes/users');
 const aiRoutes = require('./routes/ai');
 const tableRoutes = require('./routes/tables');
+const uploadRoutes = require('./routes/upload');
 
 
 const app = express();
@@ -34,6 +35,7 @@ const io = new Server(server, {
   cors: { origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE'] }
 });
 
+global.io = io; // Make io globally available for mongoose hooks
 app.set('io', io);
 app.use(cors());
 app.use(express.json());
@@ -47,6 +49,7 @@ app.use('/api/activity', activityRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/tables', tableRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // Global error handler
 app.use((err, req, res, next) => {

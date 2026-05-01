@@ -67,6 +67,38 @@ function StockBadge({ stock }) {
   );
 }
 
+// ── Image Upload Component ────────────────────────────────────────────────────
+function ImageUploadField({ value, onChange }) {
+  const [uploading, setUploading] = useState(false);
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('image', file);
+    try {
+      const res = await api.post('/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      onChange(res.data.url);
+    } catch (err) {
+      alert('Upload failed: ' + (err.response?.data?.message || err.message));
+    } finally {
+      setUploading(false);
+      e.target.value = null;
+    }
+  };
+  return (
+    <Field label="Image (optional)">
+      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <input type="file" accept="image/*" onChange={handleFileUpload} disabled={uploading} className="form-input" style={{ padding: '4px', flex: 1 }} />
+        {uploading && <span style={{ fontSize: '12px', color: 'var(--blue)' }}>Uploading...</span>}
+        {value && !uploading && <img src={value} alt="Preview" style={{ height: '30px', width: '30px', objectFit: 'cover', borderRadius: '4px' }} />}
+      </div>
+      <input className="form-input" style={{ marginTop: '4px' }} value={value || ''}
+        onChange={e => onChange(e.target.value)} placeholder="Or paste https://..." />
+    </Field>
+  );
+}
+
 // ── 1. IN STOCK form ──────────────────────────────────────────────────────────
 function InStockForm({ onSave, onCancel, saving, itemOptions }) {
   const [f, setF] = useState({ item_number: '', quantity: '', price: '', image_url: '', low_stock_threshold: '10' });
@@ -90,10 +122,7 @@ function InStockForm({ onSave, onCancel, saving, itemOptions }) {
         <input className="form-input" type="number" min="1" value={f.low_stock_threshold}
           onChange={e => setF(p => ({ ...p, low_stock_threshold: e.target.value }))} placeholder="10" />
       </Field>
-      <Field label="Image URL (optional)">
-        <input className="form-input" value={f.image_url}
-          onChange={e => setF(p => ({ ...p, image_url: e.target.value }))} placeholder="https://..." />
-      </Field>
+      <ImageUploadField value={f.image_url} onChange={(url) => setF(p => ({ ...p, image_url: url }))} />
     </FormGrid>
   );
 }
@@ -121,10 +150,7 @@ function RestockItemForm({ onSave, onCancel, saving, itemOptions }) {
         <input className="form-input" type="number" min="1" value={f.low_stock_threshold}
           onChange={e => setF(p => ({ ...p, low_stock_threshold: e.target.value }))} placeholder="10" />
       </Field>
-      <Field label="Image URL (optional)">
-        <input className="form-input" value={f.image_url}
-          onChange={e => setF(p => ({ ...p, image_url: e.target.value }))} placeholder="https://..." />
-      </Field>
+      <ImageUploadField value={f.image_url} onChange={(url) => setF(p => ({ ...p, image_url: url }))} />
     </FormGrid>
   );
 }

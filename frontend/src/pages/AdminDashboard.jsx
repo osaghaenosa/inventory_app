@@ -22,15 +22,43 @@ export default function AdminDashboard() {
   const socketRef = useRef(null);
 
   useEffect(() => {
+    // Request Native Notification Permission
+    if ('Notification' in window && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+      Notification.requestPermission();
+    }
+
     const socket = io('/', { transports: ['websocket', 'polling'] });
     socketRef.current = socket;
     socket.on('connect', () => socket.emit('join-admin'));
     socket.on('inventory-update', (data) => {
-      const notif = { id: Date.now(), message: data.message, time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) };
+      const notif = { id: Date.now(), message: data.message, time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }), type: 'info', title: 'Inventory Update' };
       setNotifications(prev => [notif, ...prev].slice(0, 10));
       setRefreshSignal(s => s + 1);
       setTimeout(() => setNotifications(prev => prev.filter(n => n.id !== notif.id)), 6000);
     });
+    
+    socket.on('ai-notification', (data) => {
+      const notif = { 
+        id: Date.now() + Math.random(), 
+        message: data.message, 
+        title: data.title,
+        type: data.type, // info, warning, critical
+        priority: data.priority,
+        time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) 
+      };
+      setNotifications(prev => [notif, ...prev].slice(0, 10));
+      setRefreshSignal(s => s + 1);
+      setTimeout(() => setNotifications(prev => prev.filter(n => n.id !== notif.id)), 8000);
+
+      // Trigger Native Notification
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(data.title || 'Inventory Notification', {
+          body: data.message,
+          icon: '/favicon.ico' // You can change this to your actual app icon if available
+        });
+      }
+    });
+
     return () => socket.disconnect();
   }, []);
 
@@ -42,8 +70,11 @@ export default function AdminDashboard() {
         {notifications.length > 0 && (
           <div className="notifications-panel">
             {notifications.map(n => (
-              <div key={n.id} className="notification-item">
-                <div className="notification-msg">🔔 {n.message}</div>
+              <div key={n.id} className={`notification-item ${n.type || 'info'}`}>
+                <div className="notification-content">
+                  {n.title && <div className="notification-title">{n.title}</div>}
+                  <div className="notification-msg">{n.type === 'critical' ? '🚨' : n.type === 'warning' ? '⚠️' : '🔔'} {n.message}</div>
+                </div>
                 <div className="notification-time">{n.time}</div>
               </div>
             ))}
