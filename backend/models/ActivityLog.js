@@ -28,9 +28,16 @@ const activityLogSchema = new mongoose.Schema({
 
 const { generatePushNotification } = require('../services/notificationService');
 
-activityLogSchema.post('save', function(doc) {
+activityLogSchema.post('save', async function(doc) {
   if (global.io) {
-    generatePushNotification(doc, global.io);
+    try {
+      // Populate worker name so notifications can include who did the action
+      const populated = await doc.populate('user_id', 'name role');
+      generatePushNotification(populated, global.io);
+    } catch(e) {
+      // Fallback: send without name
+      generatePushNotification(doc, global.io);
+    }
   }
 });
 

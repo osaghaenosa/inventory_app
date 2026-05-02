@@ -14,13 +14,8 @@ function escapeRegExp(string) {
 }
 
 function emitUpdate(req, table, action, worker) {
-  try {
-    const io = req.app.get('io');
-    io.to('admin-room').emit('inventory-update', {
-      type: 'update', table,
-      message: `${worker} ${action} in ${table}`
-    });
-  } catch(e) {}
+  // Notifications are now handled by ActivityLog post-save hook in notificationService.js
+  // Keeping this as a no-op to avoid breaking existing call sites
 }
 
 async function logActivity(userId, action, data) {
