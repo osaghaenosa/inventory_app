@@ -75,11 +75,12 @@ router.post('/', auth, async (req, res) => {
     });
 
     const io = req.app.get('io');
+    const msg = `${req.user.name} added a new record for "${product_name}"`;
     io.to('admin-room').emit('inventory-update', {
       type: 'new',
       record,
       worker: req.user.name,
-      message: `${req.user.name} added a new record for "${product_name}"`
+      message: msg
     });
 
     res.status(201).json(record);
@@ -130,11 +131,12 @@ router.put('/:id', auth, async (req, res) => {
     });
 
     const io = req.app.get('io');
+    const msg = `${req.user.name} updated record for "${record.product_name}"`;
     io.to('admin-room').emit('inventory-update', {
       type: 'update',
       record,
       worker: req.user.name,
-      message: `${req.user.name} updated record for "${record.product_name}"`
+      message: msg
     });
 
     res.json(record);
@@ -158,6 +160,7 @@ router.delete('/:id', auth, adminOnly, async (req, res) => {
     });
 
     await Inventory.findByIdAndDelete(req.params.id);
+
     res.json({ message: 'Record deleted' });
   } catch (err) {
     console.error('DELETE /inventory error:', err.message);

@@ -815,6 +815,20 @@ tr.editing td {
   .auth-card {
     padding: 24px 20px;
   }
+
+  /* Notification bell — ensure it's always above everything on mobile */
+  #notif-bell {
+    z-index: 1010 !important;
+    /* Slightly smaller on very small screens to not crowd header area */
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  /* Give the top of main-content enough breathing room so content
+     doesn't peek behind the notification bell */
+  .main-content {
+    padding-top: 68px;
+  }
 }
 
 @keyframes fadeIn {

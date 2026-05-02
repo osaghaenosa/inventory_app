@@ -27,7 +27,7 @@ const userRoutes = require('./routes/users');
 const aiRoutes = require('./routes/ai');
 const tableRoutes = require('./routes/tables');
 const uploadRoutes = require('./routes/upload');
-
+const pushRoutes = require('./routes/push').router;
 
 const app = express();
 const server = http.createServer(app);
@@ -50,6 +50,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/tables', tableRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/push', pushRoutes);
 
 // Global error handler
 app.use((err, req, res, next) => {

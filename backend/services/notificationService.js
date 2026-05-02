@@ -245,7 +245,7 @@ function parseNotification(action, workerName) {
   return null; // Nothing worth notifying
 }
 
-// ── Main export ───────────────────────────────────────────────────────────────
+const { sendPushNotification } = require('../routes/push');
 
 async function generatePushNotification(logEntry, io) {
   try {
@@ -254,7 +254,14 @@ async function generatePushNotification(logEntry, io) {
     const notification = parseNotification(action, workerName);
 
     if (notification) {
+      // 1. Live socket for currently open tabs
       io.to('admin-room').emit('ai-notification', notification);
+      
+      // 2. Real Web Push API for background notifications
+      sendPushNotification({
+        title: notification.title,
+        body: notification.message
+      }, 'admin');
     }
   } catch (err) {
     console.error('Error in notification generation:', err.message);
