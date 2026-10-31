@@ -17,7 +17,7 @@ async function ensureAdminExists() {
         password: hashed,
         role: 'admin'
       });
-      console.log('✓ Default admin created: admin@inventory.com / admin1234');
+      console.log('[OK] Default admin created: admin@inventory.com / admin1234');
     }
   } catch (err) {
     console.error('Auto-seed error:', err.message);

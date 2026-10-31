@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import api from '../utils/api.js';
+import { Calculator as CalcIcon, X, Calendar } from 'lucide-react';
 
 function formatN(n) {
   if (n == null) return '—';
@@ -94,15 +95,18 @@ export default function Calculator({ onClose }) {
           background: 'var(--bg-card2)' }}>
           <div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 700,
-              color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-              ✦ Value Calculator
+              color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.1em',
+              display: 'flex', alignItems: 'center', gap: 6 }}>
+              <CalcIcon size={16} /> Value Calculator
             </div>
             <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 2 }}>
               Calculate total inventory values by date range
             </div>
           </div>
           <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'var(--text-dim)',
-            cursor: 'pointer', fontSize: 20, lineHeight: 1, padding: 4 }}>✕</button>
+            cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 4 }}>
+            <X size={18} />
+          </button>
         </div>
 
         {/* Scrollable content */}
@@ -116,7 +120,7 @@ export default function Calculator({ onClose }) {
                   fontFamily: 'var(--font-mono)', fontWeight: 700, border: '1px solid',
                   transition: 'all 0.15s',
                   background: preset === p.id ? 'var(--accent)' : 'transparent',
-                  color: preset === p.id ? '#000' : 'var(--text-muted)',
+                  color: preset === p.id ? '#ffffff' : 'var(--text-muted)',
                   borderColor: preset === p.id ? 'var(--accent)' : 'var(--border-light)' }}>
                 {p.label}
               </button>
@@ -149,8 +153,8 @@ export default function Calculator({ onClose }) {
           {from && to && preset !== 'custom' && (
             <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--text-dim)',
               marginBottom: 16, padding: '7px 12px', background: 'var(--bg-card2)',
-              borderRadius: 6, border: '1px solid var(--border)' }}>
-              📅 {from} → {to}
+              borderRadius: 6, border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Calendar size={13} /> {from} → {to}
             </div>
           )}
 

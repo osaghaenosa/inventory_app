@@ -12,12 +12,12 @@ const { Server } = require('socket.io');
 const requiredEnv = ['MONGO_URI', 'JWT_SECRET', 'ADMIN_PASSWORD'];
 const missing = requiredEnv.filter(k => !process.env[k]);
 if (missing.length > 0) {
-  console.error('❌ Missing required env vars:', missing.join(', '));
+  console.error('[Error] Missing required env vars:', missing.join(', '));
   console.error('   Check that backend/.env exists and contains these values.');
   process.exit(1);
 }
 
-console.log('✓ Environment loaded from', path.join(__dirname, '.env'));
+console.log('[OK] Environment loaded from', path.join(__dirname, '.env'));
 console.log('  MONGO_URI:', process.env.MONGO_URI);
 
 const authRoutes = require('./routes/auth');
@@ -70,9 +70,9 @@ async function seedAdmin() {
     if (!existing) {
       const hashed = await bcrypt.hash('admin1234', 10);
       await User.create({ name: 'Admin', email: 'admin@inventory.com', password: hashed, role: 'admin' });
-      console.log('✓ Admin created: admin@inventory.com / admin1234');
+      console.log('[OK] Admin created: admin@inventory.com / admin1234');
     } else {
-      console.log('✓ Admin exists:', existing.email);
+      console.log('[OK] Admin exists:', existing.email);
     }
   } catch (err) {
     console.error('Seed error:', err.message);
@@ -81,13 +81,13 @@ async function seedAdmin() {
 
 mongoose.connect(process.env.MONGO_URI)
   .then(async () => {
-    console.log('✓ Connected to MongoDB');
+    console.log('[OK] Connected to MongoDB');
     await seedAdmin();
     server.listen(process.env.PORT || 5000, () => {
-      console.log(`✓ Server running on http://localhost:${process.env.PORT || 5000}`);
+      console.log(`[OK] Server running on http://localhost:${process.env.PORT || 5000}`);
     });
   })
   .catch((err) => {
-    console.error('❌ MongoDB error:', err.message);
+    console.error('[Error] MongoDB error:', err.message);
     process.exit(1);
   });

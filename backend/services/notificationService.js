@@ -33,7 +33,7 @@ function parseNotification(action, workerName) {
     const total = totalMatch?.[1] || '?';
     return {
       type: 'info',
-      title: '📥 Stock Restocked',
+      title: 'Stock Restocked',
       message: `${worker} restocked ${qty} unit(s) of "${item}". Total in stock: ${total}.`,
       priority: 'low',
     };
@@ -47,7 +47,7 @@ function parseNotification(action, workerName) {
     const qty  = qtyMatch?.[1]  || '?';
     return {
       type: 'info',
-      title: '📦 New Item Added',
+      title: 'New Item Added',
       message: `${worker} added "${item}" to stock with ${qty} unit(s).`,
       priority: 'low',
     };
@@ -63,7 +63,7 @@ function parseNotification(action, workerName) {
     const total = totalMatch?.[1] || '?';
     return {
       type: 'info',
-      title: '🔄 Stock Topped Up',
+      title: 'Stock Topped Up',
       message: `${worker} added ${qty} more unit(s) of "${item}". Total now: ${total}.`,
       priority: 'low',
     };
@@ -80,11 +80,11 @@ function parseNotification(action, workerName) {
     const remain = remMatch?.[1]    || '?';
     const isLow  = Number(remain) <= 5;
     const stockNote = isLow
-      ? ` ⚠️ Only ${remain} unit(s) left!`
+      ? ` Only ${remain} unit(s) left!`
       : ` Stock remaining: ${remain}.`;
     return {
       type: isLow ? 'warning' : 'info',
-      title: '🛒 Sale Recorded',
+      title: 'Sale Recorded',
       message: `${worker} sold ${qty}x "${item}" for ₦${price}.${stockNote}`,
       priority: isLow ? 'high' : 'medium',
     };
@@ -103,7 +103,7 @@ function parseNotification(action, workerName) {
     const remain   = remMatch?.[1]   || '?';
     return {
       type: 'warning',
-      title: '💳 New Debtor',
+      title: 'New Debtor',
       message: `${worker} recorded that ${customer} took ${qty}x "${item}" worth ₦${price} on credit. Stock left: ${remain}.`,
       priority: 'medium',
     };
@@ -119,7 +119,7 @@ function parseNotification(action, workerName) {
     const remain   = remMatch?.[1]  || '?';
     return {
       type: 'info',
-      title: '💰 Payment Received',
+      title: 'Payment Received',
       message: `${worker} recorded a ₦${paid} payment from ${customer}. Remaining balance: ₦${remain}.`,
       priority: 'medium',
     };
@@ -133,7 +133,7 @@ function parseNotification(action, workerName) {
     const total    = totalMatch?.[1] || '?';
     return {
       type: 'info',
-      title: '✅ Debt Cleared',
+      title: 'Debt Cleared',
       message: `${worker} marked ${customer} as fully paid. Total cleared: ₦${total}.`,
       priority: 'low',
     };
@@ -150,7 +150,7 @@ function parseNotification(action, workerName) {
     const remain = remMatch?.[1]  || '?';
     return {
       type: 'info',
-      title: '↩️ Item Returned',
+      title: 'Item Returned',
       message: `${worker} recorded a return of ${qty}x "${item}" from ${cust}. Stock now: ${remain}.`,
       priority: 'low',
     };
@@ -164,7 +164,7 @@ function parseNotification(action, workerName) {
     const remain = remMatch?.[1]  || '?';
     return {
       type: 'info',
-      title: '✏️ Sale Updated',
+      title: 'Sale Updated',
       message: `${worker} updated a sale record for "${item}". Stock remaining: ${remain}.`,
       priority: 'low',
     };
@@ -178,7 +178,7 @@ function parseNotification(action, workerName) {
     const qty  = qtyMatch?.[1]  || '?';
     return {
       type: 'warning',
-      title: '🗑️ Sale Deleted',
+      title: 'Sale Deleted',
       message: `${worker} deleted a sale record for "${item}". ${qty} unit(s) returned to stock.`,
       priority: 'medium',
     };
@@ -190,7 +190,7 @@ function parseNotification(action, workerName) {
     const item = itemMatch?.[1] || 'an item';
     return {
       type: 'info',
-      title: '✏️ Stock Updated',
+      title: 'Stock Updated',
       message: `${worker} updated the stock record for "${item}".`,
       priority: 'low',
     };
@@ -202,7 +202,7 @@ function parseNotification(action, workerName) {
     const customer  = custMatch?.[1] || 'a customer';
     return {
       type: 'warning',
-      title: '🗑️ Debtor Removed',
+      title: 'Debtor Removed',
       message: `${worker} deleted the debtor record for "${customer}".`,
       priority: 'low',
     };
@@ -214,7 +214,7 @@ function parseNotification(action, workerName) {
     const item = itemMatch?.[1] || 'an item';
     return {
       type: 'warning',
-      title: '🗑️ Item Deleted',
+      title: 'Item Deleted',
       message: `${worker} removed "${item}" from stock.`,
       priority: 'medium',
     };
@@ -226,7 +226,7 @@ function parseNotification(action, workerName) {
     const customer  = custMatch?.[1] || 'a customer';
     return {
       type: 'info',
-      title: '✏️ Debtor Updated',
+      title: 'Debtor Updated',
       message: `${worker} updated the debt record for "${customer}".`,
       priority: 'low',
     };
@@ -236,7 +236,7 @@ function parseNotification(action, workerName) {
   if (a.length > 5) {
     return {
       type: 'info',
-      title: '📋 Activity',
+      title: 'Activity',
       message: `${worker}: ${a}`,
       priority: 'low',
     };

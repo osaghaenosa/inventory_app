@@ -1,11 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
+import {
+  Bell,
+  Sparkles,
+  Smartphone,
+  CheckCircle2,
+  AlertOctagon,
+  X,
+  Mic,
+} from 'lucide-react';
 import Sidebar from '../components/Sidebar.jsx';
 import ActivityLog from '../components/ActivityLog.jsx';
 import WorkerManagement from '../components/WorkerManagement.jsx';
 import AIAnalysis from '../components/AIAnalysis.jsx';
 import AdminStats from '../components/AdminStats.jsx';
 import AllTables from '../components/AllTables.jsx';
+import VoiceCommandModal from '../components/VoiceCommandModal.jsx';
 import {
   isIOS,
   isStandalone,
@@ -27,18 +37,16 @@ const ADMIN_TABS = [
 const TYPE_COLOR = {
   critical: '#ef4444',
   warning:  '#f59e0b',
-  info:     '#6366f1',
+  info:     '#2563eb',
 };
 const TYPE_BG = {
-  critical: 'rgba(239,68,68,0.12)',
-  warning:  'rgba(245,158,11,0.12)',
-  info:     'rgba(99,102,241,0.12)',
+  critical: 'rgba(239,68,68,0.08)',
+  warning:  'rgba(245,158,11,0.08)',
+  info:     'rgba(37,99,235,0.08)',
 };
 
 // ── Notification Bell Button ──────────────────────────────────────────────────
 // Renders at a FIXED position that works on both desktop and mobile.
-// On mobile the bottom nav is at z-index:1000, so we use z-index:1010 to sit above it.
-// On mobile we position it top-right but below any browser chrome (safe-area-inset).
 function NotificationBell({ count, onClick }) {
   return (
     <button
@@ -48,9 +56,9 @@ function NotificationBell({ count, onClick }) {
         position: 'fixed',
         top: 'max(14px, env(safe-area-inset-top, 14px))',
         right: 16,
-        zIndex: 1010,           // above mobile bottom nav (1000) and desktop sidebar (100)
-        background: 'var(--bg-card, #111)',
-        border: '1px solid rgba(255,255,255,0.13)',
+        zIndex: 1010,
+        background: 'var(--bg-card, #ffffff)',
+        border: '1px solid var(--border, #e2e8f0)',
         borderRadius: '50%',
         width: 44,
         height: 44,
@@ -58,22 +66,23 @@ function NotificationBell({ count, onClick }) {
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
-        boxShadow: '0 2px 16px rgba(0,0,0,0.45)',
+        boxShadow: '0 2px 14px rgba(0,0,0,0.08)',
         transition: 'transform 0.15s, box-shadow 0.15s',
         flexShrink: 0,
+        color: 'var(--accent, #2563eb)',
       }}
       onMouseEnter={e => {
-        e.currentTarget.style.transform = 'scale(1.1)';
-        e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.6)';
+        e.currentTarget.style.transform = 'scale(1.08)';
+        e.currentTarget.style.boxShadow = '0 4px 18px rgba(0,0,0,0.12)';
       }}
       onMouseLeave={e => {
         e.currentTarget.style.transform = 'scale(1)';
-        e.currentTarget.style.boxShadow = '0 2px 16px rgba(0,0,0,0.45)';
+        e.currentTarget.style.boxShadow = '0 2px 14px rgba(0,0,0,0.08)';
       }}
       title="Notifications"
       aria-label="Open notifications"
     >
-      <span style={{ fontSize: 20, lineHeight: 1 }}>🔔</span>
+      <Bell size={20} color="var(--accent, #2563eb)" />
       {count > 0 && (
         <span style={{
           position: 'absolute',
@@ -82,14 +91,14 @@ function NotificationBell({ count, onClick }) {
           background: '#ef4444',
           color: '#fff',
           borderRadius: '50%',
-          width: 17,
-          height: 17,
+          width: 18,
+          height: 18,
           fontSize: 10,
           fontWeight: 700,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          border: '2px solid var(--bg-card, #111)',
+          border: '2px solid var(--bg-card, #ffffff)',
           pointerEvents: 'none',
         }}>
           {count > 9 ? '9+' : count}
@@ -110,7 +119,7 @@ function EnablePushPrompt({ onEnable, onDismiss, isIosNotStandalone }) {
         onClick={onDismiss}
         style={{
           position: 'fixed', inset: 0, zIndex: 1050,
-          background: 'rgba(0,0,0,0.5)',
+          background: 'rgba(15, 23, 42, 0.4)',
           backdropFilter: 'blur(3px)',
         }}
       />
@@ -122,28 +131,28 @@ function EnablePushPrompt({ onEnable, onDismiss, isIosNotStandalone }) {
         transform: 'translateX(-50%)',
         width: 'min(420px, calc(100vw - 32px))',
         zIndex: 1051,
-        background: 'var(--bg-card, #111)',
-        border: '1px solid rgba(255,255,255,0.12)',
+        background: 'var(--bg-card, #ffffff)',
+        border: '1px solid var(--border, #e2e8f0)',
         borderRadius: 16,
         padding: '22px 20px 20px',
-        boxShadow: '0 8px 48px rgba(0,0,0,0.6)',
+        boxShadow: '0 8px 36px rgba(0,0,0,0.12)',
         animation: 'slideUpPrompt 0.28s cubic-bezier(0.34,1.56,0.64,1)',
       }}>
         {/* Icon + heading */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 12 }}>
           <div style={{
             width: 48, height: 48, borderRadius: 12,
-            background: 'rgba(232,255,71,0.12)',
+            background: 'var(--accent-dim, rgba(37, 99, 235, 0.1))',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 26, flexShrink: 0,
+            flexShrink: 0,
           }}>
-            🔔
+            <Bell size={24} color="var(--accent, #2563eb)" />
           </div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--text, #f0f0f0)', marginBottom: 3 }}>
+            <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--text, #0f172a)', marginBottom: 3 }}>
               Stay notified in real-time
             </div>
-            <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.5)', lineHeight: 1.5 }}>
+            <div style={{ fontSize: 12.5, color: 'var(--text-muted, #64748b)', lineHeight: 1.5 }}>
               Get instant alerts when workers record sales, add stock, or create debtors.
             </div>
           </div>
@@ -152,31 +161,36 @@ function EnablePushPrompt({ onEnable, onDismiss, isIosNotStandalone }) {
         {/* iOS-specific instruction */}
         {isIosNotStandalone ? (
           <div style={{
-            background: 'rgba(232,255,71,0.07)',
-            border: '1px solid rgba(232,255,71,0.18)',
+            background: 'rgba(37, 99, 235, 0.05)',
+            border: '1px solid rgba(37, 99, 235, 0.18)',
             borderRadius: 10,
             padding: '10px 14px',
             marginBottom: 14,
             fontSize: 12.5,
-            color: 'rgba(255,255,255,0.7)',
+            color: 'var(--text, #0f172a)',
             lineHeight: 1.6,
           }}>
-            📲 <strong style={{ color: '#e8ff47' }}>iPhone users:</strong> Tap the{' '}
-            <strong style={{ color: '#fff' }}>Share</strong> button in Safari → then{' '}
-            <strong style={{ color: '#fff' }}>Add to Home Screen</strong>.
+            <Smartphone size={16} style={{ verticalAlign: 'middle', marginRight: 6, color: 'var(--accent, #2563eb)' }} />
+            <strong style={{ color: 'var(--accent, #2563eb)' }}>iPhone users:</strong> Tap the{' '}
+            <strong style={{ color: 'var(--text, #0f172a)' }}>Share</strong> button in Safari → then{' '}
+            <strong style={{ color: 'var(--text, #0f172a)' }}>Add to Home Screen</strong>.
             Open the app from your Home Screen, then enable push notifications.
           </div>
         ) : (
           <div style={{
-            background: 'rgba(99,102,241,0.08)',
-            border: '1px solid rgba(99,102,241,0.2)',
+            background: 'rgba(37,99,235,0.06)',
+            border: '1px solid rgba(37,99,235,0.15)',
             borderRadius: 10,
             padding: '9px 13px',
             marginBottom: 14,
             fontSize: 12,
-            color: 'rgba(255,255,255,0.55)',
+            color: 'var(--text-muted, #64748b)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
           }}>
-            ✅ Works on Android Chrome, Desktop Chrome/Edge, and iPhone (Home Screen PWA)
+            <CheckCircle2 size={16} color="var(--green, #16a34a)" style={{ flexShrink: 0 }} />
+            <span>Works on Android Chrome, Desktop Chrome/Edge, and iPhone (Home Screen PWA)</span>
           </div>
         )}
 
@@ -188,8 +202,8 @@ function EnablePushPrompt({ onEnable, onDismiss, isIosNotStandalone }) {
               onClick={onEnable}
               style={{
                 flex: 1,
-                background: 'var(--accent, #e8ff47)',
-                color: '#000',
+                background: 'var(--accent, #2563eb)',
+                color: '#ffffff',
                 border: 'none',
                 borderRadius: 10,
                 padding: '12px 0',
@@ -197,11 +211,15 @@ function EnablePushPrompt({ onEnable, onDismiss, isIosNotStandalone }) {
                 fontSize: 14,
                 cursor: 'pointer',
                 transition: 'opacity 0.15s',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 8,
               }}
-              onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
+              onMouseEnter={e => e.currentTarget.style.opacity = '0.9'}
               onMouseLeave={e => e.currentTarget.style.opacity = '1'}
             >
-              🔔 Enable Notifications
+              <Bell size={16} /> Enable Notifications
             </button>
           )}
           <button
@@ -210,10 +228,10 @@ function EnablePushPrompt({ onEnable, onDismiss, isIosNotStandalone }) {
             style={{
               flex: isIosNotStandalone ? 1 : 0,
               padding: '12px 18px',
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.1)',
+              background: 'var(--bg-subtle, #f8fafc)',
+              border: '1px solid var(--border, #e2e8f0)',
               borderRadius: 10,
-              color: 'rgba(255,255,255,0.5)',
+              color: 'var(--text-muted, #64748b)',
               fontSize: 13,
               cursor: 'pointer',
               whiteSpace: 'nowrap',
@@ -236,7 +254,7 @@ function NotificationPanel({ notifications, onClose, onClear, permStatus, onRequ
         onClick={onClose}
         style={{
           position: 'fixed', inset: 0, zIndex: 1020,
-          background: 'rgba(0,0,0,0.35)',
+          background: 'rgba(15, 23, 42, 0.3)',
           backdropFilter: 'blur(2px)',
         }}
       />
@@ -248,27 +266,27 @@ function NotificationPanel({ notifications, onClose, onClear, permStatus, onRequ
         height: '100dvh',
         width: 'min(380px, 95vw)',
         zIndex: 1021,
-        background: 'var(--bg-card, #111)',
-        borderLeft: '1px solid rgba(255,255,255,0.1)',
+        background: 'var(--bg-card, #ffffff)',
+        borderLeft: '1px solid var(--border, #e2e8f0)',
         display: 'flex',
         flexDirection: 'column',
-        boxShadow: '-8px 0 40px rgba(0,0,0,0.5)',
+        boxShadow: '-8px 0 32px rgba(0,0,0,0.1)',
         animation: 'slideInRight 0.22s ease',
       }}>
         {/* Header */}
         <div style={{
           padding: '18px 20px 14px',
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          borderBottom: '1px solid var(--border, #e2e8f0)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: 10,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontSize: 22 }}>🔔</span>
+            <Bell size={20} color="var(--accent, #2563eb)" />
             <div>
-              <div style={{ fontWeight: 700, fontSize: 16, color: 'var(--text, #f0f0f0)' }}>Notifications</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)' }}>
+              <div style={{ fontWeight: 700, fontSize: 16, color: 'var(--text, #0f172a)' }}>Notifications</div>
+              <div style={{ fontSize: 11, color: 'var(--text-muted, #64748b)' }}>
                 {notifications.length === 0 ? 'All caught up!' : `${notifications.length} alert${notifications.length > 1 ? 's' : ''}`}
               </div>
             </div>
@@ -278,8 +296,8 @@ function NotificationPanel({ notifications, onClose, onClear, permStatus, onRequ
               <button
                 onClick={onRequestPerm}
                 style={{
-                  background: 'var(--accent, #e8ff47)',
-                  color: '#000',
+                  background: 'var(--accent, #2563eb)',
+                  color: '#ffffff',
                   border: 'none',
                   borderRadius: 6,
                   padding: '5px 11px',
@@ -296,9 +314,9 @@ function NotificationPanel({ notifications, onClose, onClear, permStatus, onRequ
               <button
                 onClick={onClear}
                 style={{
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  color: 'rgba(255,255,255,0.5)',
+                  background: 'var(--bg-subtle, #f8fafc)',
+                  border: '1px solid var(--border, #e2e8f0)',
+                  color: 'var(--text-muted, #64748b)',
                   borderRadius: 6,
                   padding: '5px 10px',
                   fontSize: 11,
@@ -310,9 +328,10 @@ function NotificationPanel({ notifications, onClose, onClear, permStatus, onRequ
             )}
             <button
               onClick={onClose}
-              style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', fontSize: 20, cursor: 'pointer', lineHeight: 1 }}
+              style={{ background: 'none', border: 'none', color: 'var(--text-muted, #64748b)', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 4 }}
+              aria-label="Close"
             >
-              ✕
+              <X size={18} />
             </button>
           </div>
         </div>
@@ -320,9 +339,11 @@ function NotificationPanel({ notifications, onClose, onClear, permStatus, onRequ
         {/* List */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 10 }}>
           {notifications.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '60px 20px', color: 'rgba(255,255,255,0.3)' }}>
-              <div style={{ fontSize: 40, marginBottom: 12 }}>🎉</div>
-              <div style={{ fontSize: 14, fontWeight: 500 }}>No notifications yet</div>
+            <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-dim, #94a3b8)' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+                <Sparkles size={36} color="var(--accent, #2563eb)" />
+              </div>
+              <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--text, #0f172a)' }}>No notifications yet</div>
               <div style={{ fontSize: 12, marginTop: 6 }}>Activity will appear here as workers make changes.</div>
             </div>
           ) : (
@@ -331,7 +352,7 @@ function NotificationPanel({ notifications, onClose, onClear, permStatus, onRequ
                 key={n.id}
                 style={{
                   background: TYPE_BG[n.type] || TYPE_BG.info,
-                  border: `1px solid ${TYPE_COLOR[n.type] || TYPE_COLOR.info}33`,
+                  border: `1px solid ${TYPE_COLOR[n.type] || TYPE_COLOR.info}25`,
                   borderLeft: `3px solid ${TYPE_COLOR[n.type] || TYPE_COLOR.info}`,
                   borderRadius: 10,
                   padding: '12px 14px',
@@ -344,16 +365,17 @@ function NotificationPanel({ notifications, onClose, onClear, permStatus, onRequ
                   <div style={{ fontWeight: 600, fontSize: 13, color: TYPE_COLOR[n.type] || TYPE_COLOR.info }}>
                     {n.title}
                   </div>
-                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', whiteSpace: 'nowrap', marginTop: 2 }}>
+                  <div style={{ fontSize: 10, color: 'var(--text-dim, #94a3b8)', whiteSpace: 'nowrap', marginTop: 2 }}>
                     {n.time}
                   </div>
                 </div>
-                <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.85)', lineHeight: 1.55 }}>
+                <div style={{ fontSize: 12.5, color: 'var(--text, #0f172a)', lineHeight: 1.55 }}>
                   {n.message}
                 </div>
                 {n.priority === 'high' && (
-                  <div style={{ fontSize: 10, color: '#ef4444', fontWeight: 600, marginTop: 2 }}>
-                    🚨 Requires attention
+                  <div style={{ fontSize: 10, color: '#ef4444', fontWeight: 600, marginTop: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <AlertOctagon size={12} />
+                    <span>Requires attention</span>
                   </div>
                 )}
               </div>
@@ -376,12 +398,12 @@ function ToastNotif({ notif, onDismiss }) {
       zIndex: 1015,
       maxWidth: 320,
       width: 'calc(100vw - 32px)',
-      background: 'var(--bg-card, #111)',
-      border: `1px solid ${TYPE_COLOR[notif.type] || TYPE_COLOR.info}55`,
+      background: 'var(--bg-card, #ffffff)',
+      border: `1px solid ${TYPE_COLOR[notif.type] || TYPE_COLOR.info}33`,
       borderLeft: `4px solid ${TYPE_COLOR[notif.type] || TYPE_COLOR.info}`,
       borderRadius: 10,
       padding: '12px 14px',
-      boxShadow: '0 4px 30px rgba(0,0,0,0.4)',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
       animation: 'fadeSlideIn 0.25s ease',
       display: 'flex',
       gap: 10,
@@ -391,15 +413,16 @@ function ToastNotif({ notif, onDismiss }) {
         <div style={{ fontWeight: 600, fontSize: 12.5, color: TYPE_COLOR[notif.type] || TYPE_COLOR.info, marginBottom: 3 }}>
           {notif.title}
         </div>
-        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.85)', lineHeight: 1.5 }}>
+        <div style={{ fontSize: 12, color: 'var(--text, #0f172a)', lineHeight: 1.5 }}>
           {notif.message}
         </div>
       </div>
       <button
         onClick={() => onDismiss(notif.id)}
-        style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', cursor: 'pointer', fontSize: 14, padding: 0, lineHeight: 1 }}
+        style={{ background: 'none', border: 'none', color: 'var(--text-muted, #64748b)', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
+        aria-label="Close"
       >
-        ✕
+        <X size={15} />
       </button>
     </div>
   );
@@ -417,6 +440,7 @@ export default function AdminDashboard() {
   const [refreshSignal, setRefreshSignal] = useState(0);
   const [permStatus, setPermStatus] = useState('default');
   const [showPushPrompt, setShowPushPrompt] = useState(false);
+  const [showVoiceAI, setShowVoiceAI] = useState(false);
   const socketRef = useRef(null);
 
   // ── On mount: check permission state and decide whether to show the prompt ──
@@ -506,7 +530,7 @@ export default function AdminDashboard() {
         message: data.message,
         time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
         type: 'info',
-        title: '📦 Inventory Update',
+        title: 'Inventory Update',
       });
     });
 
@@ -531,6 +555,50 @@ export default function AdminDashboard() {
   return (
     <div className="app-layout">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} adminTabs={ADMIN_TABS} workerTabs={[]} />
+
+      {/* ── Top-right "Use AI" button & Notification bell ── */}
+      <div style={{
+        position: 'fixed',
+        top: 'max(14px, env(safe-area-inset-top, 14px))',
+        right: 68,
+        zIndex: 1010,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+      }}>
+        <button
+          id="admin-use-ai-btn"
+          onClick={() => setShowVoiceAI(true)}
+          style={{
+            height: 44,
+            padding: '0 16px',
+            borderRadius: 22,
+            background: 'linear-gradient(135deg, var(--accent, #2563eb) 0%, #1d4ed8 100%)',
+            color: '#ffffff',
+            border: 'none',
+            fontWeight: 700,
+            fontSize: 13,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 7,
+            boxShadow: '0 2px 14px rgba(37, 99, 235, 0.35)',
+            transition: 'all 0.15s ease',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.transform = 'scale(1.04)';
+            e.currentTarget.style.boxShadow = '0 4px 18px rgba(37, 99, 235, 0.45)';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow = '0 2px 14px rgba(37, 99, 235, 0.35)';
+          }}
+          title="Open Voice AI Assistant"
+        >
+          <Sparkles size={16} />
+          <span>Use AI</span>
+        </button>
+      </div>
 
       {/* ── Notification bell — always visible, above everything ── */}
       <NotificationBell count={unreadCount} onClick={openPanel} />
@@ -560,12 +628,39 @@ export default function AdminDashboard() {
         />
       )}
 
+      {/* ── Voice AI Command Modal ── */}
+      <VoiceCommandModal
+        isOpen={showVoiceAI}
+        onClose={() => setShowVoiceAI(false)}
+        onActionExecuted={() => setRefreshSignal(s => s + 1)}
+      />
+
       <main className="main-content">
         {activeTab === 'dashboard' && (
           <div>
-            <div className="page-header">
-              <h1 className="page-title">Admin Dashboard</h1>
-              <p className="page-subtitle">Live overview of all inventory activity</p>
+            <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
+              <div>
+                <h1 className="page-title">Admin Dashboard</h1>
+                <p className="page-subtitle">Live overview of all inventory activity</p>
+              </div>
+              <button
+                className="btn btn-primary"
+                onClick={() => setShowVoiceAI(true)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '10px 18px',
+                  fontSize: 14,
+                  fontWeight: 600,
+                  borderRadius: 10,
+                  background: 'linear-gradient(135deg, var(--accent, #2563eb) 0%, #1d4ed8 100%)',
+                  boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)',
+                }}
+              >
+                <Sparkles size={16} />
+                <span>Use AI</span>
+              </button>
             </div>
             <AdminStats refreshSignal={refreshSignal} />
           </div>

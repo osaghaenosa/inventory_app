@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { X } from 'lucide-react';
 import api from '../utils/api.js';
 import { useAuth } from '../context/AuthContext.jsx';
 
@@ -225,9 +226,9 @@ export default function InventoryTable({ isAdmin = false, refreshSignal }) {
   return (
     <div>
       {error && (
-        <div className="alert alert-error" style={{ marginBottom: 12 }}>
-          {error}
-          <button onClick={() => setError('')} style={{ marginLeft: 10, background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', fontWeight: 700 }}>✕</button>
+        <div className="alert alert-error" style={{ marginBottom: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span>{error}</span>
+          <button onClick={() => setError('')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 2 }} aria-label="Dismiss error"><X size={15} /></button>
         </div>
       )}
 

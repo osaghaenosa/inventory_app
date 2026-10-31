@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import api from '../utils/api.js';
 import { AutoInput } from './TableBase.jsx';
+import { X, Check, CheckCircle2, AlertTriangle, AlertCircle } from 'lucide-react';
 
 function today() {
   const n = new Date();
@@ -48,7 +49,9 @@ function OwingModal({ debtor, onClose, onDone }) {
             </div>
           </div>
           <button onClick={onClose} style={{ background:'none', border:'none',
-            color:'var(--text-dim)', cursor:'pointer', fontSize:18 }}>✕</button>
+            color:'var(--text-dim)', cursor:'pointer', display:'flex', alignItems:'center', padding:4 }}>
+            <X size={16} />
+          </button>
         </div>
 
         <div style={{ padding:22 }}>
@@ -138,9 +141,9 @@ function AddDebtorForm({ itemOptions, onSave, onCancel, saving }) {
           <label className="form-label">Item Number</label>
           <AutoInput value={f.item_number} onChange={s('item_number')} options={itemOptions} placeholder="e.g. ITM-001" required />
           {stockInfo && (
-            <div style={{ fontSize:10, fontFamily:'var(--font-mono)', marginTop:3,
+            <div style={{ fontSize:10, fontFamily:'var(--font-mono)', marginTop:3, display:'flex', alignItems:'center', gap:4,
               color: stockInfo.found ? (stockInfo.quantity < 5 ? 'var(--red)' : 'var(--green)') : 'var(--red)' }}>
-              {stockInfo.found ? `Available: ${stockInfo.quantity} units` : '⚠ Item not found in stock'}
+              {stockInfo.found ? `Available: ${stockInfo.quantity} units` : <><AlertCircle size={11} /> Item not found in stock</>}
             </div>
           )}
         </div>
@@ -149,8 +152,8 @@ function AddDebtorForm({ itemOptions, onSave, onCancel, saving }) {
           <input className="form-input" type="number" min="1" value={f.quantity}
             onChange={e => setF(p=>({...p,quantity:e.target.value}))} required placeholder="0" />
           {stockInfo?.found && f.quantity && Number(f.quantity) > stockInfo.quantity && (
-            <div style={{ fontSize:10, color:'var(--red)', fontFamily:'var(--font-mono)', marginTop:3 }}>
-              ⚠ Exceeds stock ({stockInfo.quantity})
+            <div style={{ fontSize:10, color:'var(--red)', fontFamily:'var(--font-mono)', marginTop:3, display:'flex', alignItems:'center', gap:4 }}>
+              <AlertTriangle size={11} /> Exceeds stock ({stockInfo.quantity})
             </div>
           )}
         </div>
@@ -370,9 +373,9 @@ function DebtorsHistory() {
                 </td>
                 <td>
                   <span style={{ padding:'2px 10px', borderRadius:20, fontSize:10, fontFamily:'var(--font-mono)', fontWeight:700,
-                    background: r.paid ? 'rgba(68,255,136,0.15)' : 'rgba(255,68,68,0.15)',
-                    color: r.paid ? 'var(--green)' : 'var(--red)' }}>
-                    {r.paid ? '✓ Paid' : 'Owes'}
+                    background: r.paid ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)',
+                    color: r.paid ? 'var(--green)' : 'var(--red)', display:'inline-flex', alignItems:'center', gap:4 }}>
+                    {r.paid ? <><Check size={11} /> Paid</> : 'Owes'}
                   </span>
                 </td>
                 <td style={{ fontFamily:'var(--font-mono)', fontSize:11, color:'var(--text-dim)' }}>{r.date}</td>
@@ -417,7 +420,7 @@ export default function DebtorsTable({ refreshSignal, itemOptions = [] }) {
     try {
       await api.post(`/tables/debtors/${debtor._id}/markpaid`);
       fetchDebtors();
-      showSuccess(`✓ ${debtor.customer_info} marked as fully paid`);
+      showSuccess(`${debtor.customer_info} marked as fully paid`);
     } catch(e) { setError(e.response?.data?.message || 'Failed'); }
   };
 
@@ -444,7 +447,7 @@ export default function DebtorsTable({ refreshSignal, itemOptions = [] }) {
   return (
     <div>
       {error && <div className="alert alert-error" style={{ marginBottom:12 }}>
-        {error} <button onClick={()=>setError('')} style={{marginLeft:8,background:'none',border:'none',color:'inherit',cursor:'pointer',fontWeight:700}}>✕</button>
+        {error} <button onClick={()=>setError('')} style={{marginLeft:8,background:'none',border:'none',color:'inherit',cursor:'pointer',display:'inline-flex',alignItems:'center'}}><X size={13} /></button>
       </div>}
       {success && <div className="alert alert-success" style={{ marginBottom:12 }}>{success}</div>}
 
@@ -507,7 +510,9 @@ export default function DebtorsTable({ refreshSignal, itemOptions = [] }) {
           ) : debtors.length === 0 ? (
             <div style={{ textAlign:'center', padding:48, background:'var(--bg-card)',
               border:'1px solid var(--border)', borderRadius:10 }}>
-              <div style={{ fontSize:32, marginBottom:10 }}>✓</div>
+              <div style={{ display:'flex', justifyContent:'center', marginBottom:12 }}>
+                <CheckCircle2 size={36} color="var(--green)" />
+              </div>
               <p style={{ color:'var(--text-dim)', fontFamily:'var(--font-mono)', fontSize:12 }}>
                 No active debtors. All clear!
               </p>

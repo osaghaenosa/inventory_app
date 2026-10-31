@@ -110,7 +110,7 @@ async function sendPushNotification(payload, targetRole = 'admin') {
           subDoc.subscription,
           JSON.stringify(payload)
         );
-        console.log(`[Push] ✓ Delivered to ${subDoc.endpoint.slice(0, 60)}...`);
+        console.log(`[Push] [OK] Delivered to ${subDoc.endpoint.slice(0, 60)}...`);
       } catch (err) {
         const status = err.statusCode || err.status || 'unknown';
         const body   = err.body || err.message || '';
@@ -120,11 +120,11 @@ async function sendPushNotification(payload, targetRole = 'admin') {
           console.log(`[Push] Expired subscription removed (${status}): ${subDoc.endpoint.slice(0, 60)}...`);
           deadEndpoints.push(subDoc.endpoint);
         } else if (status === 401) {
-          console.error('[Push] ✗ 401 Unauthorised — VAPID keys may be wrong or mismatched. Body:', body);
+          console.error('[Push] [Error] 401 Unauthorised — VAPID keys may be wrong or mismatched. Body:', body);
         } else if (status === 400) {
-          console.error('[Push] ✗ 400 Bad Request — subscription object may be malformed. Body:', body);
+          console.error('[Push] [Error] 400 Bad Request — subscription object may be malformed. Body:', body);
         } else {
-          console.error(`[Push] ✗ Error (${status}) sending to ${subDoc.endpoint.slice(0, 60)}...`);
+          console.error(`[Push] [Error] (${status}) sending to ${subDoc.endpoint.slice(0, 60)}...`);
           console.error('       Details:', body);
         }
       }

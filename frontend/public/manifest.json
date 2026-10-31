@@ -1,13 +1,13 @@
 {
-  "name": "Inventory Manager",
-  "short_name": "Inventory",
-  "description": "Smart inventory management for your business",
+  "name": "Light shop Inventory software",
+  "short_name": "Light Shop",
+  "description": "Smart inventory management software for Light shop",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#0d0d14",
-  "theme_color": "#0d0d14",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
   "lang": "en",
   "categories": ["business", "productivity"],
   "icons": [

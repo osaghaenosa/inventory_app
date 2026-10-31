@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import api from '../utils/api.js';
 import { useAuth } from '../context/AuthContext.jsx';
+import { X } from 'lucide-react';
 
 export function AutoInput({ value, onChange, options = [], placeholder, required, style }) {
   const [show, setShow] = useState(false);
@@ -145,7 +146,9 @@ export default function TableBase({
       {error && (
         <div className="alert alert-error" style={{ marginBottom: 12 }}>
           {error}
-          <button onClick={() => setError('')} style={{ marginLeft: 8, background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', fontWeight: 700 }}>✕</button>
+          <button onClick={() => setError('')} style={{ marginLeft: 8, background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
+            <X size={13} />
+          </button>
         </div>
       )}
       {successMsg && (

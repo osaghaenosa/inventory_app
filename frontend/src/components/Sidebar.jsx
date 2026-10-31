@@ -48,7 +48,7 @@ export default function Sidebar({ activeTab, setActiveTab, adminTabs, workerTabs
   return (
     <div className="sidebar">
       <div className="sidebar-logo">
-        <h1>InventoryOS</h1>
+        <h1>Light shop Inventory software</h1>
         <p>{user?.role === 'admin' ? 'Admin Panel' : 'Worker View'}</p>
       </div>
 

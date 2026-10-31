@@ -37,7 +37,7 @@ export default function AdminLogin() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="auth-logo">InventoryOS</div>
+        <div className="auth-logo">Light shop Inventory software</div>
         <h2 className="auth-title">Admin Access</h2>
         <p className="auth-subtitle">
           {step === 1 ? 'Enter the admin access password to continue' : 'Enter your admin credentials'}

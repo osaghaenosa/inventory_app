@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import api from '../utils/api.js';
+import { Check, AlertTriangle, X, HelpCircle } from 'lucide-react';
 
 const STATUS_CONFIG = {
-  in_stock:    { label: 'In Stock',        color: '#44ff88', bg: 'rgba(68,255,136,0.1)',  icon: '✓', border: 'rgba(68,255,136,0.3)' },
-  low_stock:   { label: 'Low Stock',       color: '#ff8844', bg: 'rgba(255,136,68,0.1)', icon: '⚠', border: 'rgba(255,136,68,0.3)' },
-  out_of_stock:{ label: 'Out of Stock',    color: '#ff4444', bg: 'rgba(255,68,68,0.1)',  icon: '✕', border: 'rgba(255,68,68,0.3)' },
-  not_found:   { label: 'Not Found',       color: '#888',    bg: 'rgba(136,136,136,0.1)',icon: '?', border: 'rgba(136,136,136,0.3)' },
+  in_stock:    { label: 'In Stock',        color: '#10b981', bg: 'rgba(16,185,129,0.1)',  Icon: Check, border: 'rgba(16,185,129,0.3)' },
+  low_stock:   { label: 'Low Stock',       color: '#f59e0b', bg: 'rgba(245,158,11,0.1)', Icon: AlertTriangle, border: 'rgba(245,158,11,0.3)' },
+  out_of_stock:{ label: 'Out of Stock',    color: '#ef4444', bg: 'rgba(239,68,68,0.1)',  Icon: X, border: 'rgba(239,68,68,0.3)' },
+  not_found:   { label: 'Not Found',       color: '#94a3b8', bg: 'rgba(148,163,184,0.1)',Icon: HelpCircle, border: 'rgba(148,163,184,0.3)' },
 };
 
 function StatPill({ label, value, color }) {
@@ -172,9 +173,9 @@ export default function ItemSearch({ itemOptions = [] }) {
             <div style={{ display:'flex', alignItems:'center', gap:16 }}>
               <div style={{ width:56, height:56, borderRadius:12,
                 background: status.color, display:'flex', alignItems:'center',
-                justifyContent:'center', fontSize:24, fontWeight:900, color:'#000',
+                justifyContent:'center', color:'#ffffff',
                 flexShrink:0 }}>
-                {status.icon}
+                {status.Icon && <status.Icon size={26} />}
               </div>
               <div>
                 <div style={{ fontFamily:'var(--font-mono)', fontSize:22, fontWeight:900,
@@ -254,8 +255,8 @@ export default function ItemSearch({ itemOptions = [] }) {
                 { key:'paid', label:'Status', render: r => (
                   <span style={{ padding:'2px 8px', borderRadius:20, fontSize:10, fontFamily:'var(--font-mono)',
                     fontWeight:700, background: r.paid ? 'rgba(68,255,136,0.15)' : 'rgba(255,68,68,0.15)',
-                    color: r.paid ? 'var(--green)' : 'var(--red)' }}>
-                    {r.paid ? '✓ Paid' : 'Owes'}
+                    color: r.paid ? 'var(--green)' : 'var(--red)', display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                    {r.paid ? <><Check size={11} /> Paid</> : 'Owes'}
                   </span>
                 )},
               ]} />
@@ -278,8 +279,9 @@ export default function ItemSearch({ itemOptions = [] }) {
           {result.debtors.length === 0 && result.returned.length === 0 && (
             <div style={{ marginTop:14, padding:'14px 16px', background:'var(--bg-card2)',
               borderRadius:8, border:'1px solid var(--border)', fontSize:12,
-              color:'var(--text-dim)', fontFamily:'var(--font-mono)' }}>
-              ✓ No credit sales or returns recorded for this item
+              color:'var(--text-dim)', fontFamily:'var(--font-mono)', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Check size={14} color="var(--green)" />
+              <span>No credit sales or returns recorded for this item</span>
             </div>
           )}
         </div>

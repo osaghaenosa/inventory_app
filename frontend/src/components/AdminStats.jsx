@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import api from '../utils/api.js';
+import { Sparkles, RefreshCw, AlertTriangle } from 'lucide-react';
 
 function renderAnalysis(text) {
   return text
@@ -81,7 +82,9 @@ export default function AdminStats({ refreshSignal }) {
         <div style={{ background:'var(--red-dim)', border:'1px solid rgba(255,68,68,0.25)',
           borderRadius:'var(--radius)', padding:'12px 16px', marginBottom:20 }}>
           <div style={{ fontSize:11, fontFamily:'var(--font-mono)', fontWeight:700, color:'var(--red)',
-            textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:8 }}>⚠ Low Stock Alert</div>
+            textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:8, display:'flex', alignItems:'center', gap:6 }}>
+            <AlertTriangle size={14} /> Low Stock Alert
+          </div>
           <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
             {stats.lowStockItems.map(r => (
               <span key={r._id} style={{ background:'rgba(255,68,68,0.15)', border:'1px solid rgba(255,68,68,0.3)',
@@ -119,11 +122,13 @@ export default function AdminStats({ refreshSignal }) {
         <div className="card" style={{ borderColor: aiSummary ? 'var(--accent)' : 'var(--border)' }}>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom: aiSummary ? 16 : 0 }}>
             <div>
-              <div className="card-title" style={{ marginBottom:2 }}>✦ AI Daily Summary</div>
+              <div className="card-title" style={{ marginBottom:2, display:'flex', alignItems:'center', gap:6 }}>
+                <Sparkles size={14} color="var(--accent)" /> AI Daily Summary
+              </div>
               <p style={{ fontSize:11, color:'var(--text-dim)', fontFamily:'var(--font-mono)' }}>Today's inventory overview</p>
             </div>
             <button className="btn btn-primary btn-sm" onClick={runAiSummary} disabled={aiLoading}>
-              {aiLoading ? <><span className="spinner"></span> Analyzing…</> : aiSummary ? '↺ Refresh' : 'Generate'}
+              {aiLoading ? <><span className="spinner"></span> Analyzing…</> : aiSummary ? <><RefreshCw size={12} /> Refresh</> : 'Generate'}
             </button>
           </div>
           {aiSummary

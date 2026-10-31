@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import api from '../utils/api.js';
+import { Sparkles, RefreshCw, Lightbulb, Zap, AlertTriangle } from 'lucide-react';
 
 function renderAnalysis(text) {
   return text
@@ -47,22 +48,19 @@ export default function AIAnalysis() {
           <button className="btn btn-primary" onClick={() => runAnalysis(false)}
             disabled={loading} style={{ marginTop: 20 }}>
             {loading ? <><span className="spinner"></span> Analyzing…</> : <>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14" height="14">
-                <circle cx="12" cy="12" r="3"/>
-                <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-              </svg>
+              <Sparkles size={14} />
               Run Analysis
             </>}
           </button>
           {result && (
             <button className="btn btn-secondary" onClick={() => runAnalysis(true)}
-              disabled={loading} style={{ marginTop: 20 }}>
-              ↺ Force Refresh
+              disabled={loading} style={{ marginTop: 20, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              <RefreshCw size={12} /> Force Refresh
             </button>
           )}
         </div>
-        <p style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 12, fontFamily: 'var(--font-mono)' }}>
-          💡 Results are cached for 10 min. Use "Force Refresh" only when needed to avoid hitting API quota.
+        <p style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 12, fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: 6 }}>
+          <Lightbulb size={13} color="var(--orange)" /> Results are cached for 10 min. Use "Force Refresh" only when needed to avoid hitting API quota.
         </p>
       </div>
 
@@ -75,19 +73,19 @@ export default function AIAnalysis() {
             <div className="flex gap-2">
               {result.cached && (
                 <span className="badge" style={{ background: 'var(--orange-dim)', color: 'var(--orange)' }}>
-                  ⚡ Cached
+                  <Zap size={11} /> Cached
                 </span>
               )}
               {result.stale && (
                 <span className="badge" style={{ background: 'var(--red-dim)', color: 'var(--red)' }}>
-                  ⚠ Stale (rate limited)
+                  <AlertTriangle size={11} /> Stale (rate limited)
                 </span>
               )}
               <span className="badge" style={{
                 background: result.source === 'ai' ? 'var(--accent-dim)' : 'var(--blue-dim)',
                 color: result.source === 'ai' ? 'var(--accent)' : 'var(--blue)'
               }}>
-                {result.source === 'ai' ? '✦ Gemini AI' : 'Local Summary'}
+                {result.source === 'ai' ? <><Sparkles size={11} /> Gemini AI</> : 'Local Summary'}
               </span>
             </div>
           </div>
@@ -97,7 +95,9 @@ export default function AIAnalysis() {
 
       {!result && !loading && (
         <div className="card" style={{ textAlign: 'center', padding: 48 }}>
-          <div style={{ fontSize: 32, marginBottom: 12 }}>✦</div>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+            <Sparkles size={36} color="var(--accent)" />
+          </div>
           <p style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>
             Select a date and run analysis to see AI-generated insights
           </p>

@@ -15,27 +15,27 @@ const User = mongoose.model('User', UserSchema);
 
 async function seed() {
   if (!process.env.MONGO_URI) {
-    console.error('❌ MONGO_URI not found. Check backend/.env');
+    console.error('[Error] MONGO_URI not found. Check backend/.env');
     process.exit(1);
   }
 
   await mongoose.connect(process.env.MONGO_URI);
-  console.log('✓ Connected to MongoDB');
+  console.log('[OK] Connected to MongoDB');
 
   const existing = await User.findOne({ role: 'admin' });
   if (existing) {
-    console.log('✓ Admin already exists:', existing.email);
+    console.log('[OK] Admin already exists:', existing.email);
     process.exit(0);
   }
 
   const hashed = await bcrypt.hash('admin1234', 10);
   await User.create({ name: 'Admin', email: 'admin@inventory.com', password: hashed, role: 'admin' });
-  console.log('✓ Admin created: admin@inventory.com / admin1234');
+  console.log('[OK] Admin created: admin@inventory.com / admin1234');
 
   try {
     const workerHash = await bcrypt.hash('worker123', 10);
     await User.create({ name: 'John Worker', email: 'john@inventory.com', password: workerHash, role: 'worker' });
-    console.log('✓ Sample worker created: john@inventory.com / worker123');
+    console.log('[OK] Sample worker created: john@inventory.com / worker123');
   } catch (e) {
     console.log('  (Sample worker already exists)');
   }

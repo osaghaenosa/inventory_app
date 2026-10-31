@@ -5,6 +5,17 @@ import TableBase, { AutoInput } from './TableBase.jsx';
 import DebtorsTable from './DebtorsTable.jsx';
 import ItemSearch from './ItemSearch.jsx';
 import Calculator from './Calculator.jsx';
+import {
+  Package,
+  ShoppingCart,
+  CreditCard,
+  ArrowDownToLine,
+  AlertTriangle,
+  RotateCcw,
+  Check,
+  AlertCircle,
+  Calculator as CalcIcon
+} from 'lucide-react';
 
 // ── Shared helpers ────────────────────────────────────────────────────────────
 function Field({ label, children, hint }) {
@@ -55,8 +66,8 @@ function useStockCheck(itemNumber) {
 function StockBadge({ stock }) {
   if (!stock) return null;
   if (!stock.found) return (
-    <div style={{ fontSize: 11, color: 'var(--red)', fontFamily: 'var(--font-mono)', marginTop: 4 }}>
-      ⚠ Item not found in In Stock
+    <div style={{ fontSize: 11, color: 'var(--red)', fontFamily: 'var(--font-mono)', marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+      <AlertCircle size={13} /> Item not found in In Stock
     </div>
   );
   return (
@@ -167,7 +178,7 @@ function SoldOutForm({ onSave, onCancel, saving, itemOptions }) {
     try {
       const res = await onSave(f);
       if (res?.stockRemaining !== undefined) {
-        setFeedback(`✓ Sale recorded. "${f.item_number}" stock remaining: ${res.stockRemaining}`);
+        setFeedback(`Sale recorded. "${f.item_number}" stock remaining: ${res.stockRemaining}`);
       }
     } catch(e) {}
   };
@@ -186,8 +197,8 @@ function SoldOutForm({ onSave, onCancel, saving, itemOptions }) {
             onChange={e => setF(p => ({ ...p, quantity: e.target.value }))} required placeholder="0"
           />
           {stock?.found && f.quantity && Number(f.quantity) > stock.quantity && (
-            <div style={{ fontSize: 11, color: 'var(--red)', marginTop: 3, fontFamily: 'var(--font-mono)' }}>
-              ⚠ Exceeds available stock ({stock.quantity})
+            <div style={{ fontSize: 11, color: 'var(--red)', marginTop: 3, fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <AlertTriangle size={12} /> Exceeds available stock ({stock.quantity})
             </div>
           )}
         </Field>
@@ -201,7 +212,9 @@ function SoldOutForm({ onSave, onCancel, saving, itemOptions }) {
         </Field>
       </FormGrid>
       {feedback && (
-        <div className="alert alert-success" style={{ marginTop: 10 }}>{feedback}</div>
+        <div className="alert alert-success" style={{ marginTop: 10 }}>
+          <Check size={14} /> {feedback}
+        </div>
       )}
     </div>
   );
@@ -228,8 +241,8 @@ function DebtorForm({ onSave, onCancel, saving, itemOptions }) {
         <input className="form-input" type="number" min="1" value={f.quantity}
           onChange={e => setF(p => ({ ...p, quantity: e.target.value }))} required placeholder="0" />
         {stock?.found && f.quantity && Number(f.quantity) > stock.quantity && (
-          <div style={{ fontSize: 11, color: 'var(--red)', marginTop: 3, fontFamily: 'var(--font-mono)' }}>
-            ⚠ Exceeds available stock ({stock.quantity})
+          <div style={{ fontSize: 11, color: 'var(--red)', marginTop: 3, fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: 4 }}>
+            <AlertTriangle size={12} /> Exceeds available stock ({stock.quantity})
           </div>
         )}
       </Field>
@@ -253,7 +266,7 @@ function ReturnedForm({ onSave, onCancel, saving, itemOptions }) {
     try {
       const res = await onSave(f);
       if (res?.stockAfter !== undefined) {
-        setFeedback(`✓ Return recorded. "${f.item_number}" stock now: ${res.stockAfter}`);
+        setFeedback(`Return recorded. "${f.item_number}" stock now: ${res.stockAfter}`);
       }
     } catch(e) {}
   };
@@ -271,8 +284,8 @@ function ReturnedForm({ onSave, onCancel, saving, itemOptions }) {
             </div>
           )}
           {stock && !stock.found && (
-            <div style={{ fontSize: 11, color: 'var(--red)', fontFamily: 'var(--font-mono)', marginTop: 4 }}>
-              ⚠ Item not found in stock
+            <div style={{ fontSize: 11, color: 'var(--red)', fontFamily: 'var(--font-mono)', marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <AlertCircle size={12} /> Item not found in stock
             </div>
           )}
         </div>
@@ -316,7 +329,7 @@ const IN_STOCK_COLS = [
   { key: 'worker', label: 'Worker', render: row => <span style={{ color: 'var(--blue)', fontSize: 12 }}>{fmtWorker(row)}</span> },
   { key: 'status', label: 'Status', render: row => (
     <span className={`badge ${row.quantity <= row.low_stock_threshold ? 'badge-locked' : 'badge-editable'}`}>
-      {row.quantity <= row.low_stock_threshold ? '⚠ Low' : '✓ OK'}
+      {row.quantity <= row.low_stock_threshold ? <><AlertTriangle size={11} /> Low</> : <><Check size={11} /> OK</>}
     </span>
   )},
 ];
@@ -366,7 +379,7 @@ const DEBTOR_COLS = [
           <option value="true">Paid</option>
         </select>
       : <span className={`badge ${row.paid ? 'badge-editable' : 'badge-locked'}`}>
-          {row.paid ? '✓ Paid' : 'Owes'}
+          {row.paid ? <><Check size={11} /> Paid</> : 'Owes'}
         </span>
   },
   { key: 'worker', label: 'Worker', render: row => <span style={{ color: 'var(--blue)', fontSize: 12 }}>{fmtWorker(row)}</span> },
@@ -381,7 +394,7 @@ const RESTOCKED_COLS = [
     valueStyle: () => ({ color: 'var(--text-dim)' }) },
   { key: 'date',   label: 'Last Updated', field: 'date',   mono: true, valueStyle: () => ({ color: 'var(--text-dim)', fontSize: 11 }) },
   { key: 'worker', label: 'Worker',       render: row => <span style={{ color: 'var(--blue)', fontSize: 12 }}>{fmtWorker(row)}</span> },
-  { key: 'alert',  label: 'Action',       render: () => <span className="badge badge-locked">⚠ Restock Now</span> },
+  { key: 'alert',  label: 'Action',       render: () => <span className="badge badge-locked"><AlertTriangle size={11} /> Restock Now</span> },
 ];
 
 const RETURNED_COLS = [
@@ -397,12 +410,12 @@ const RETURNED_COLS = [
 
 // ── Tabs ──────────────────────────────────────────────────────────────────────
 const TABS = [
-  { id: 'instock',   label: 'In Stock',      icon: '📦' },
-  { id: 'soldout',   label: 'Sold Out',      icon: '🛒' },
-  { id: 'debtors',   label: 'Debtors',       icon: '💳' },
-  { id: 'restockitem', label: 'Restock Item',  icon: '📥' },
-  { id: 'restocked', label: 'Restock Alert', icon: '⚠️' },
-  { id: 'returned',  label: 'Returned',      icon: '↩️' },
+  { id: 'instock',     label: 'In Stock',      Icon: Package },
+  { id: 'soldout',     label: 'Sold Out',      Icon: ShoppingCart },
+  { id: 'debtors',     label: 'Debtors',       Icon: CreditCard },
+  { id: 'restockitem', label: 'Restock Item',  Icon: ArrowDownToLine },
+  { id: 'restocked',   label: 'Restock Alert', Icon: AlertTriangle },
+  { id: 'returned',    label: 'Returned',      Icon: RotateCcw },
 ];
 
 // ── InStock wrapper: workers view-only, admins can edit ───────────────────────
@@ -466,13 +479,8 @@ export default function AllTables({ refreshSignal }) {
         </div>
         <button onClick={() => setShowCalc(true)} className="btn btn-secondary"
           style={{ padding: '11px 16px', borderRadius: 8, display: 'flex', alignItems: 'center',
-            gap: 8, border: '1px solid var(--border-light)', whiteSpace: 'nowrap' }}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
-            <rect x="4" y="2" width="16" height="20" rx="2"/>
-            <line x1="8" y1="6" x2="16" y2="6"/>
-            <line x1="8" y1="10" x2="16" y2="10"/>
-            <line x1="8" y1="14" x2="12" y2="14"/>
-          </svg>
+            gap: 8, border: '1px solid var(--border)', whiteSpace: 'nowrap' }}>
+          <CalcIcon size={16} />
           Calculator
         </button>
       </div>
@@ -481,11 +489,15 @@ export default function AllTables({ refreshSignal }) {
 
       {/* Tab nav */}
       <div className="tab-nav">
-        {TABS.map(t => (
-          <button key={t.id} onClick={() => setActiveTab(t.id)} className={`tab-item ${activeTab === t.id ? 'active' : ''}`}>
-            <span style={{ marginRight: 6 }}>{t.icon}</span>{t.label}
-          </button>
-        ))}
+        {TABS.map(t => {
+          const IconComp = t.Icon;
+          return (
+            <button key={t.id} onClick={() => setActiveTab(t.id)} className={`tab-item ${activeTab === t.id ? 'active' : ''}`}>
+              <IconComp size={15} />
+              <span>{t.label}</span>
+            </button>
+          );
+        })}
       </div>
 
       {activeTab === 'instock' && (
@@ -509,7 +521,7 @@ export default function AllTables({ refreshSignal }) {
       {activeTab === 'restocked' && (
         <TableBase title="Restock Alert" subtitle="Auto-calculated from In Stock. Items shown here are at or below their low stock threshold. Read-only."
           endpoint="restocked" columns={RESTOCKED_COLS}
-          emptyMsg="✓ All items are well stocked"
+          emptyMsg="All items are well stocked"
           refreshSignal={sig} canAdd={false} readOnly />
       )}
       {activeTab === 'restockitem' && (
