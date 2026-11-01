@@ -104,11 +104,11 @@ export default function AdminStats({ refreshSignal }) {
             ? <p style={{ color:'var(--text-dim)', fontSize:12, fontFamily:'var(--font-mono)' }}>No activity yet</p>
             : stats.recentActivity.map((log, i) => (
               <div key={log._id} style={{ display:'flex', gap:10, alignItems:'flex-start',
-                padding:'8px 0', borderBottom: i < stats.recentActivity.length-1 ? '1px solid var(--border)':'none' }}>
+                padding:'8px 0', borderBottom: i < stats.recentActivity.length-1 ? '1px solid #000000':'none' }}>
                 <div style={{ width:7, height:7, borderRadius:'50%', flexShrink:0, marginTop:5,
                   background: log.action.includes('Added') ? 'var(--green)' : log.action.includes('Updated') ? 'var(--blue)' : 'var(--red)' }} />
                 <div>
-                  <div style={{ fontSize:12, color:'var(--text)' }}>{log.action}</div>
+                  <div style={{ fontSize:12, color:'var(--text)', fontWeight: 600 }}>{log.action}</div>
                   <div style={{ fontSize:11, color:'var(--text-dim)', fontFamily:'var(--font-mono)', marginTop:1 }}>
                     {log.user_id?.name} · {new Date(log.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}
                   </div>
@@ -119,7 +119,7 @@ export default function AdminStats({ refreshSignal }) {
         </div>
 
         {/* AI Summary */}
-        <div className="card" style={{ borderColor: aiSummary ? 'var(--accent)' : 'var(--border)' }}>
+        <div className="card" style={{ border: aiSummary ? '2px solid var(--accent)' : '2px solid #000000' }}>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom: aiSummary ? 16 : 0 }}>
             <div>
               <div className="card-title" style={{ marginBottom:2, display:'flex', alignItems:'center', gap:6 }}>
@@ -132,8 +132,8 @@ export default function AdminStats({ refreshSignal }) {
             </button>
           </div>
           {aiSummary
-            ? <div className="ai-output" style={{ maxHeight:200 }} dangerouslySetInnerHTML={{ __html: renderAnalysis(aiSummary) }} />
-            : <div style={{ padding:'20px', background:'var(--bg-card2)', borderRadius:'var(--radius-sm)', textAlign:'center' }}>
+            ? <div className="ai-output" style={{ maxHeight:200, border: '2px solid #000000' }} dangerouslySetInnerHTML={{ __html: renderAnalysis(aiSummary) }} />
+            : <div style={{ padding:'20px', background:'var(--bg-card2)', border: '1.5px solid #000000', borderRadius:'var(--radius-sm)', textAlign:'center' }}>
                 <p style={{ color:'var(--text-dim)', fontSize:12, fontFamily:'var(--font-mono)' }}>Click Generate for AI insights</p>
               </div>
           }

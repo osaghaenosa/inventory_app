@@ -32,13 +32,13 @@ function OwingModal({ debtor, onClose, onDone }) {
     <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.75)', zIndex:1100,
       display:'flex', alignItems:'center', justifyContent:'center', padding:16,
       backdropFilter:'blur(4px)' }} onClick={e => e.target===e.currentTarget && onClose()}>
-      <div style={{ background:'var(--bg-card)', border:'1px solid var(--border-light)',
+      <div style={{ background:'var(--bg-card)', border:'2px solid #000000',
         borderRadius:14, width:'100%', maxWidth:400, overflow:'hidden',
         boxShadow:'0 24px 64px rgba(0,0,0,0.6)' }}>
 
         {/* Header */}
         <div style={{ padding:'18px 22px', background:'rgba(255,136,68,0.08)',
-          borderBottom:'1px solid rgba(255,136,68,0.2)', display:'flex', justifyContent:'space-between' }}>
+          borderBottom:'2px solid #000000', display:'flex', justifyContent:'space-between' }}>
           <div>
             <div style={{ fontFamily:'var(--font-mono)', fontSize:13, fontWeight:700,
               color:'var(--orange)', textTransform:'uppercase', letterSpacing:'0.08em' }}>
@@ -63,7 +63,7 @@ function OwingModal({ debtor, onClose, onDone }) {
               { label:'Still Owes',    value:`₦${debtor.price.toLocaleString()}`,                          color:'var(--red)' },
             ].map(s => (
               <div key={s.label} style={{ background:'var(--bg-card2)', borderRadius:8,
-                padding:'10px 12px', border:'1px solid var(--border)', textAlign:'center' }}>
+                padding:'10px 12px', border:'1.5px solid #000000', textAlign:'center' }}>
                 <div style={{ fontFamily:'var(--font-mono)', fontSize:15, fontWeight:800, color:s.color }}>{s.value}</div>
                 <div style={{ fontSize:9, color:'var(--text-dim)', textTransform:'uppercase',
                   letterSpacing:'0.08em', fontFamily:'var(--font-mono)', marginTop:3 }}>{s.label}</div>
@@ -180,10 +180,8 @@ function DebtorCard({ debtor, onMarkPaid, onOwing, onDelete, isAdmin }) {
     ? Math.min(100, ((debtor.amount_paid||0) / debtor.original_price) * 100) : 0;
 
   return (
-    <div style={{ background:'var(--bg-card)', border:'1px solid var(--border)',
-      borderRadius:10, overflow:'hidden', transition:'border-color 0.2s' }}
-      onMouseEnter={e => e.currentTarget.style.borderColor='var(--border-light)'}
-      onMouseLeave={e => e.currentTarget.style.borderColor='var(--border)'}>
+    <div style={{ background:'var(--bg-card)', border:'2px solid #000000',
+      borderRadius:10, overflow:'hidden', boxShadow:'0 2px 8px rgba(0,0,0,0.06)' }}>
 
       {/* Card main row */}
       <div style={{ padding:'14px 16px' }}>
@@ -280,8 +278,8 @@ function DebtorCard({ debtor, onMarkPaid, onOwing, onDelete, isAdmin }) {
           )}
           {debtor.payment_history?.length > 0 && (
             <button onClick={() => setExpanded(!expanded)}
-              style={{ padding:'8px 12px', borderRadius:7, border:'1px solid var(--border)',
-                background:'transparent', color:'var(--text-dim)', fontSize:12, cursor:'pointer' }}>
+              style={{ padding:'8px 12px', borderRadius:7, border:'1.5px solid #000000',
+                background:'transparent', color:'var(--text)', fontSize:12, fontWeight:600, cursor:'pointer' }}>
               {expanded ? 'Hide' : `History (${debtor.payment_history.length})`}
             </button>
           )}
@@ -290,13 +288,13 @@ function DebtorCard({ debtor, onMarkPaid, onOwing, onDelete, isAdmin }) {
 
       {/* Payment history expansion */}
       {expanded && debtor.payment_history?.length > 0 && (
-        <div style={{ borderTop:'1px solid var(--border)', padding:'12px 16px',
+        <div style={{ borderTop:'2px solid #000000', padding:'12px 16px',
           background:'var(--bg-card2)' }}>
           <div style={{ fontFamily:'var(--font-mono)', fontSize:10, textTransform:'uppercase',
             letterSpacing:'0.08em', color:'var(--text-dim)', marginBottom:8 }}>Payment History</div>
           {debtor.payment_history.map((p, i) => (
             <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center',
-              padding:'6px 0', borderBottom: i < debtor.payment_history.length-1 ? '1px solid var(--border)' : 'none' }}>
+              padding:'6px 0', borderBottom: i < debtor.payment_history.length-1 ? '1px solid #000000' : 'none' }}>
               <div>
                 <span style={{ fontFamily:'var(--font-mono)', fontSize:13, fontWeight:700, color:'var(--green)' }}>
                   +₦{p.amount.toLocaleString()}
@@ -340,8 +338,8 @@ function DebtorsHistory() {
           { label:'Total Collected',  value:`₦${paid.reduce((s,r)=>s+(r.original_price||0),0).toLocaleString()}`, color:'var(--accent)' },
           { label:'Outstanding',      value:`₦${unpaid.reduce((s,r)=>s+r.price,0).toLocaleString()}`, color:'var(--red)' },
         ].map(s => (
-          <div key={s.label} style={{ background:'var(--bg-card)', border:'1px solid var(--border)',
-            borderRadius:8, padding:'12px 14px' }}>
+          <div key={s.label} style={{ background:'var(--bg-card)', border:'2px solid #000000',
+            borderRadius:8, padding:'12px 14px', boxShadow:'0 2px 6px rgba(0,0,0,0.06)' }}>
             <div style={{ fontFamily:'var(--font-mono)', fontSize:s.value.toString().length>6?14:20,
               fontWeight:800, color:s.color }}>{s.value}</div>
             <div style={{ fontSize:9, color:'var(--text-dim)', textTransform:'uppercase',
@@ -509,7 +507,7 @@ export default function DebtorsTable({ refreshSignal, itemOptions = [] }) {
             <div style={{ textAlign:'center', padding:40 }}><span className="spinner"></span></div>
           ) : debtors.length === 0 ? (
             <div style={{ textAlign:'center', padding:48, background:'var(--bg-card)',
-              border:'1px solid var(--border)', borderRadius:10 }}>
+              border:'2px solid #000000', borderRadius:10 }}>
               <div style={{ display:'flex', justifyContent:'center', marginBottom:12 }}>
                 <CheckCircle2 size={36} color="var(--green)" />
               </div>

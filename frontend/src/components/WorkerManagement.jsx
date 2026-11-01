@@ -63,7 +63,7 @@ export default function WorkerManagement() {
       {success && <div className="alert alert-success">{success}</div>}
 
       {showAdd && (
-        <div className="card mb-4" style={{ borderColor: 'var(--accent)', borderLeftWidth: 3 }}>
+        <div className="card mb-4" style={{ border: '2px solid #000000', borderLeft: '4px solid var(--accent)' }}>
           <div className="card-title">Create Worker Account</div>
           <form onSubmit={createWorker}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>

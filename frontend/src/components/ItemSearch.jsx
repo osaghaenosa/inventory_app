@@ -12,7 +12,7 @@ const STATUS_CONFIG = {
 function StatPill({ label, value, color }) {
   return (
     <div style={{ display:'flex', flexDirection:'column', alignItems:'center', background:'var(--bg-card2)',
-      border:'1px solid var(--border)', borderRadius:8, padding:'12px 16px', minWidth:100, flex:1 }}>
+      border:'2px solid #000000', borderRadius:8, padding:'12px 16px', minWidth:100, flex:1 }}>
       <div style={{ fontFamily:'var(--font-mono)', fontSize:20, fontWeight:700, color: color || 'var(--text)' }}>{value}</div>
       <div style={{ fontSize:10, color:'var(--text-dim)', textTransform:'uppercase', letterSpacing:'0.08em',
         fontFamily:'var(--font-mono)', marginTop:4, textAlign:'center' }}>{label}</div>
@@ -22,10 +22,10 @@ function StatPill({ label, value, color }) {
 
 function Section({ title, children, accent }) {
   return (
-    <div style={{ marginTop:16, borderRadius:8, border:`1px solid ${accent || 'var(--border)'}`,
+    <div style={{ marginTop:16, borderRadius:8, border:'2px solid #000000',
       overflow:'hidden' }}>
       <div style={{ padding:'8px 14px', background: accent ? `${accent}18` : 'var(--bg-card2)',
-        borderBottom:`1px solid ${accent || 'var(--border)'}`,
+        borderBottom:'2px solid #000000',
         fontFamily:'var(--font-mono)', fontSize:11, fontWeight:700,
         textTransform:'uppercase', letterSpacing:'0.1em', color: accent || 'var(--text-dim)' }}>
         {title}
@@ -40,21 +40,21 @@ function MiniTable({ rows, cols }) {
     <p style={{ color:'var(--text-dim)', fontSize:12, fontFamily:'var(--font-mono)' }}>None recorded</p>
   );
   return (
-    <div style={{ overflowX:'auto' }}>
+    <div style={{ overflowX:'auto', border:'2px solid #000000', borderRadius:6 }}>
       <table style={{ width:'100%', borderCollapse:'collapse', fontSize:12 }}>
         <thead>
-          <tr>{cols.map(c => (
-            <th key={c.key} style={{ textAlign:'left', padding:'6px 10px', fontFamily:'var(--font-mono)',
-              fontSize:10, textTransform:'uppercase', letterSpacing:'0.08em', color:'var(--text-dim)',
-              borderBottom:'1px solid var(--border)', whiteSpace:'nowrap' }}>{c.label}</th>
+          <tr style={{ background:'#f1f5f9', borderBottom:'2px solid #000000' }}>{cols.map(c => (
+            <th key={c.key} style={{ textAlign:'left', padding:'8px 10px', fontFamily:'var(--font-mono)',
+              fontSize:10, textTransform:'uppercase', letterSpacing:'0.08em', color:'#000000', fontWeight:800,
+              borderBottom:'2px solid #000000', borderRight:'1px solid #000000', whiteSpace:'nowrap', background:'#f1f5f9' }}>{c.label}</th>
           ))}</tr>
         </thead>
         <tbody>{rows.map((row, i) => (
-          <tr key={row._id || i} style={{ background: i%2===0 ? 'transparent' : 'var(--bg-card2)' }}>
+          <tr key={row._id || i} style={{ background: i%2===0 ? 'transparent' : 'var(--bg-card2)', borderBottom:'1px solid #000000' }}>
             {cols.map(c => (
-              <td key={c.key} style={{ padding:'7px 10px', color: c.color ? c.color(row) : 'var(--text-muted)',
+              <td key={c.key} style={{ padding:'8px 10px', color: c.color ? c.color(row) : 'var(--text)',
                 fontFamily: c.mono ? 'var(--font-mono)' : 'var(--font-body)',
-                borderBottom:'1px solid var(--border)', whiteSpace:'nowrap' }}>
+                borderBottom:'1px solid #000000', borderRight:'1px solid #000000', whiteSpace:'nowrap' }}>
                 {c.render ? c.render(row) : (row[c.key] ?? '—')}
               </td>
             ))}
@@ -134,14 +134,14 @@ export default function ItemSearch({ itemOptions = [] }) {
             />
             {showSugg && suggestions.length > 0 && (
               <div style={{ position:'absolute', top:'100%', left:0, right:0, zIndex:400,
-                background:'var(--bg-card)', border:'1px solid var(--border-light)',
+                background:'var(--bg-card)', border:'2px solid #000000',
                 borderRadius:8, marginTop:4, maxHeight:200, overflowY:'auto',
-                boxShadow:'0 12px 32px rgba(0,0,0,0.5)' }}>
+                boxShadow:'0 12px 32px rgba(0,0,0,0.15)' }}>
                 {suggestions.map((s, i) => (
                   <div key={i} onMouseDown={() => { setQuery(s); doSearch(s); }}
                     style={{ padding:'10px 16px', cursor:'pointer', fontSize:13, color:'var(--text)',
                       display:'flex', alignItems:'center', gap:10,
-                      borderBottom: i < suggestions.length-1 ? '1px solid var(--border)' : 'none' }}
+                      borderBottom: i < suggestions.length-1 ? '1px solid #000000' : 'none' }}
                     onMouseEnter={e => e.currentTarget.style.background='var(--bg-card2)'}
                     onMouseLeave={e => e.currentTarget.style.background='transparent'}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
@@ -278,7 +278,7 @@ export default function ItemSearch({ itemOptions = [] }) {
           {/* No debtors no returns message */}
           {result.debtors.length === 0 && result.returned.length === 0 && (
             <div style={{ marginTop:14, padding:'14px 16px', background:'var(--bg-card2)',
-              borderRadius:8, border:'1px solid var(--border)', fontSize:12,
+              borderRadius:8, border:'2px solid #000000', fontSize:12,
               color:'var(--text-dim)', fontFamily:'var(--font-mono)', display: 'flex', alignItems: 'center', gap: 8 }}>
               <Check size={14} color="var(--green)" />
               <span>No credit sales or returns recorded for this item</span>

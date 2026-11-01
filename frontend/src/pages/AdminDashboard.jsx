@@ -58,7 +58,7 @@ function NotificationBell({ count, onClick }) {
         right: 16,
         zIndex: 1010,
         background: 'var(--bg-card, #ffffff)',
-        border: '1px solid var(--border, #e2e8f0)',
+        border: '2px solid #000000',
         borderRadius: '50%',
         width: 44,
         height: 44,
@@ -132,7 +132,7 @@ function EnablePushPrompt({ onEnable, onDismiss, isIosNotStandalone }) {
         width: 'min(420px, calc(100vw - 32px))',
         zIndex: 1051,
         background: 'var(--bg-card, #ffffff)',
-        border: '1px solid var(--border, #e2e8f0)',
+        border: '2px solid #000000',
         borderRadius: 16,
         padding: '22px 20px 20px',
         boxShadow: '0 8px 36px rgba(0,0,0,0.12)',
@@ -229,7 +229,7 @@ function EnablePushPrompt({ onEnable, onDismiss, isIosNotStandalone }) {
               flex: isIosNotStandalone ? 1 : 0,
               padding: '12px 18px',
               background: 'var(--bg-subtle, #f8fafc)',
-              border: '1px solid var(--border, #e2e8f0)',
+              border: '1.5px solid #000000',
               borderRadius: 10,
               color: 'var(--text-muted, #64748b)',
               fontSize: 13,
@@ -267,7 +267,7 @@ function NotificationPanel({ notifications, onClose, onClear, permStatus, onRequ
         width: 'min(380px, 95vw)',
         zIndex: 1021,
         background: 'var(--bg-card, #ffffff)',
-        borderLeft: '1px solid var(--border, #e2e8f0)',
+        borderLeft: '2px solid #000000',
         display: 'flex',
         flexDirection: 'column',
         boxShadow: '-8px 0 32px rgba(0,0,0,0.1)',
@@ -276,7 +276,7 @@ function NotificationPanel({ notifications, onClose, onClear, permStatus, onRequ
         {/* Header */}
         <div style={{
           padding: '18px 20px 14px',
-          borderBottom: '1px solid var(--border, #e2e8f0)',
+          borderBottom: '2px solid #000000',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -315,7 +315,7 @@ function NotificationPanel({ notifications, onClose, onClear, permStatus, onRequ
                 onClick={onClear}
                 style={{
                   background: 'var(--bg-subtle, #f8fafc)',
-                  border: '1px solid var(--border, #e2e8f0)',
+                  border: '1.5px solid #000000',
                   color: 'var(--text-muted, #64748b)',
                   borderRadius: 6,
                   padding: '5px 10px',

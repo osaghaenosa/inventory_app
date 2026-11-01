@@ -413,12 +413,12 @@ export default function VoiceCommandModal({ isOpen, onClose, onActionExecuted })
 
   return (
     <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()} style={{ zIndex: 1200, padding: 16 }}>
-      <div className="modal" style={{ maxWidth: 640, width: '100%', maxHeight: '92vh', overflowY: 'auto', padding: 0, borderRadius: 16, border: '1px solid var(--border)' }}>
+      <div className="modal" style={{ maxWidth: 640, width: '100%', maxHeight: '92vh', overflowY: 'auto', padding: 0, borderRadius: 16, border: '2px solid #000000' }}>
         
         {/* Header */}
         <div style={{
           padding: '20px 24px',
-          borderBottom: '1px solid var(--border)',
+          borderBottom: '2px solid #000000',
           background: 'linear-gradient(to right, #ffffff, #f8fafc)',
           display: 'flex',
           alignItems: 'center',
@@ -457,7 +457,7 @@ export default function VoiceCommandModal({ isOpen, onClose, onActionExecuted })
                 setVoiceMuted(!voiceMuted);
               }}
               className="btn btn-secondary btn-sm"
-              style={{ padding: '6px 10px', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 6 }}
+              style={{ padding: '6px 10px', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 6, border: '1.5px solid #000000' }}
               title={voiceMuted ? 'Unmute voice' : 'Mute voice'}
             >
               {voiceMuted ? <VolumeX size={15} color="var(--red)" /> : <Volume2 size={15} color="var(--accent)" />}
@@ -478,7 +478,7 @@ export default function VoiceCommandModal({ isOpen, onClose, onActionExecuted })
           {/* Interactive Voice Hub */}
           <div style={{
             background: 'var(--bg-subtle)',
-            border: '1px solid var(--border)',
+            border: '2px solid #000000',
             borderRadius: 14,
             padding: '24px 20px',
             textAlign: 'center',
@@ -839,11 +839,11 @@ export default function VoiceCommandModal({ isOpen, onClose, onActionExecuted })
           {queryData && (
             <div style={{
               background: 'var(--bg-card)',
-              border: '1px solid var(--border)',
+              border: '2px solid #000000',
               borderRadius: 12,
               padding: 20,
               marginBottom: 20,
-              boxShadow: 'var(--shadow-sm)'
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -855,7 +855,7 @@ export default function VoiceCommandModal({ isOpen, onClose, onActionExecuted })
                 <button
                   onClick={() => speak(queryData.speechResponse)}
                   className="btn btn-secondary btn-sm"
-                  style={{ gap: 4, padding: '4px 8px', fontSize: 11 }}
+                  style={{ gap: 4, padding: '4px 8px', fontSize: 11, border: '1.5px solid #000000' }}
                 >
                   <Volume2 size={13} color="var(--accent)" /> Replay Voice
                 </button>
@@ -867,21 +867,21 @@ export default function VoiceCommandModal({ isOpen, onClose, onActionExecuted })
 
               {/* Data Items Preview */}
               {queryData.data?.items && queryData.data.items.length > 0 && (
-                <div style={{ maxHeight: 180, overflowY: 'auto', border: '1px solid var(--border)', borderRadius: 8 }}>
-                  <table style={{ width: '100%', fontSize: 12 }}>
+                <div style={{ maxHeight: 180, overflowY: 'auto', border: '2px solid #000000', borderRadius: 8 }}>
+                  <table style={{ width: '100%', fontSize: 12, borderCollapse: 'collapse' }}>
                     <thead>
-                      <tr style={{ background: 'var(--bg-subtle)' }}>
-                        <th style={{ padding: '6px 10px' }}>Item Number</th>
-                        <th style={{ padding: '6px 10px' }}>Quantity</th>
-                        <th style={{ padding: '6px 10px' }}>Price</th>
+                      <tr style={{ background: '#f1f5f9', borderBottom: '2px solid #000000' }}>
+                        <th style={{ padding: '8px 10px', color: '#000000', fontWeight: 700, borderRight: '1px solid #000000', borderBottom: '2px solid #000000' }}>Item Number</th>
+                        <th style={{ padding: '8px 10px', color: '#000000', fontWeight: 700, borderRight: '1px solid #000000', borderBottom: '2px solid #000000' }}>Quantity</th>
+                        <th style={{ padding: '8px 10px', color: '#000000', fontWeight: 700, borderBottom: '2px solid #000000' }}>Price</th>
                       </tr>
                     </thead>
                     <tbody>
                       {queryData.data.items.slice(0, 10).map((it, idx) => (
-                        <tr key={idx} style={{ borderBottom: '1px solid var(--border)' }}>
-                          <td style={{ padding: '6px 10px', fontWeight: 600 }}>{it.item_number}</td>
-                          <td style={{ padding: '6px 10px', color: 'var(--accent)', fontWeight: 700 }}>{it.quantity} units</td>
-                          <td style={{ padding: '6px 10px' }}>₦{Number(it.price || 0).toLocaleString()}</td>
+                        <tr key={idx} style={{ borderBottom: '1px solid #000000' }}>
+                          <td style={{ padding: '8px 10px', fontWeight: 600, borderRight: '1px solid #000000' }}>{it.item_number}</td>
+                          <td style={{ padding: '8px 10px', color: 'var(--accent)', fontWeight: 700, borderRight: '1px solid #000000' }}>{it.quantity} units</td>
+                          <td style={{ padding: '8px 10px' }}>₦{Number(it.price || 0).toLocaleString()}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -892,7 +892,7 @@ export default function VoiceCommandModal({ isOpen, onClose, onActionExecuted })
           )}
 
           {/* JSON Command View Dropdown */}
-          <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16, marginTop: 10 }}>
+          <div style={{ borderTop: '2px solid #000000', paddingTop: 16, marginTop: 10 }}>
             <button
               onClick={() => setShowJson(!showJson)}
               style={{

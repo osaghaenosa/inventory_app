@@ -73,12 +73,12 @@ function ProductInput({ value, onChange, placeholder, allProducts }) {
           left: 0,
           right: 0,
           background: 'var(--bg-card)',
-          border: '1px solid var(--border-light)',
+          border: '2px solid #000000',
           borderRadius: 'var(--radius-sm)',
           zIndex: 200,
           maxHeight: 180,
           overflowY: 'auto',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
           marginTop: 2
         }}>
           {filtered.map((p, i) => (
@@ -90,7 +90,7 @@ function ProductInput({ value, onChange, placeholder, allProducts }) {
                 cursor: 'pointer',
                 fontSize: 13,
                 color: 'var(--text)',
-                borderBottom: i < filtered.length - 1 ? '1px solid var(--border)' : 'none',
+                borderBottom: i < filtered.length - 1 ? '1px solid #000000' : 'none',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8
@@ -262,7 +262,7 @@ export default function InventoryTable({ isAdmin = false, refreshSignal }) {
       </div>
 
       {showAdd && (
-        <div className="card mb-4" style={{ borderColor: 'var(--accent)', borderLeftWidth: 3 }}>
+        <div className="card mb-4" style={{ border: '2px solid #000000', borderLeft: '4px solid var(--accent)' }}>
           <div className="card-title">New Inventory Record — {today}</div>
           <form onSubmit={addRecord}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 10 }}>

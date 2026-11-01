@@ -84,13 +84,13 @@ export default function Calculator({ onClose }) {
       backdropFilter: 'blur(6px)', animation: 'fadeIn 0.2s ease' }}
       onClick={e => e.target === e.currentTarget && onClose()}>
 
-      <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-light)',
+      <div style={{ background: 'var(--bg-card)', border: '2px solid #000000',
         borderRadius: 16, width: '100%', maxWidth: 520, maxHeight: '90vh',
         overflow: 'hidden', display: 'flex', flexDirection: 'column',
         boxShadow: '0 24px 64px rgba(0,0,0,0.6)' }}>
 
         {/* Header */}
-        <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)',
+        <div style={{ padding: '20px 24px', borderBottom: '2px solid #000000',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           background: 'var(--bg-card2)' }}>
           <div>
@@ -172,7 +172,7 @@ export default function Calculator({ onClose }) {
           {result && !loading && (
             <div style={{ animation: 'slideIn 0.3s ease' }}>
               {/* Big total */}
-              <div style={{ background: 'var(--accent-dim)', border: '1px solid rgba(232,255,71,0.25)',
+              <div style={{ background: 'var(--accent-dim)', border: '2px solid #000000',
                 borderRadius: 12, padding: '20px 24px', marginBottom: 20, textAlign: 'center' }}>
                 <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', textTransform: 'uppercase',
                   letterSpacing: '0.1em', color: 'var(--text-dim)', marginBottom: 6 }}>Net Revenue</div>
@@ -200,7 +200,7 @@ export default function Calculator({ onClose }) {
                   { label: 'Debt Records',   value: result.totalDebtQty,    color: 'var(--red)' },
                 ].map(s => (
                   <div key={s.label} style={{ background: 'var(--bg-card2)', borderRadius: 8,
-                    padding: '12px 14px', border: '1px solid var(--border)' }}>
+                    padding: '12px 14px', border: '1.5px solid #000000' }}>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 800, color: s.color }}>{s.value}</div>
                     <div style={{ fontSize: 10, color: 'var(--text-dim)', textTransform: 'uppercase',
                       letterSpacing: '0.08em', fontFamily: 'var(--font-mono)', marginTop: 3 }}>{s.label}</div>

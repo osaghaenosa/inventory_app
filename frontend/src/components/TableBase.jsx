@@ -32,12 +32,12 @@ export function AutoInput({ value, onChange, options = [], placeholder, required
         placeholder={placeholder} required={required} autoComplete="off" />
       {show && filtered.length > 0 && (
         <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: 'var(--bg-card)',
-          border: '1px solid var(--border-light)', borderRadius: 'var(--radius-sm)', zIndex: 300,
-          maxHeight: 160, overflowY: 'auto', boxShadow: '0 8px 24px rgba(0,0,0,0.4)', marginTop: 2 }}>
+          border: '2px solid #000000', borderRadius: 'var(--radius-sm)', zIndex: 300,
+          maxHeight: 160, overflowY: 'auto', boxShadow: '0 8px 24px rgba(0,0,0,0.15)', marginTop: 2 }}>
           {filtered.map((o, i) => (
             <div key={i} onMouseDown={() => { onChange(o); setShow(false); }}
               style={{ padding: '8px 12px', cursor: 'pointer', fontSize: 13, color: 'var(--text)',
-                borderBottom: i < filtered.length - 1 ? '1px solid var(--border)' : 'none' }}
+                borderBottom: i < filtered.length - 1 ? '1px solid #000000' : 'none' }}
               onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-card2)'}
               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
               {o}
@@ -171,7 +171,7 @@ export default function TableBase({
       </div>
 
       {showAdd && AddFormComponent && (
-        <div className="card mb-4" style={{ borderColor: 'var(--accent)', borderLeftWidth: 3 }}>
+        <div className="card mb-4" style={{ border: '2px solid #000000', borderLeft: '4px solid var(--accent)' }}>
           <div className="card-title">New {title} Entry</div>
           <AddFormComponent
             itemOptions={itemOptions}

@@ -479,7 +479,7 @@ export default function AllTables({ refreshSignal }) {
         </div>
         <button onClick={() => setShowCalc(true)} className="btn btn-secondary"
           style={{ padding: '11px 16px', borderRadius: 8, display: 'flex', alignItems: 'center',
-            gap: 8, border: '1px solid var(--border)', whiteSpace: 'nowrap' }}>
+            gap: 8, border: '2px solid #000000', whiteSpace: 'nowrap' }}>
           <CalcIcon size={16} />
           Calculator
         </button>

@@ -34,7 +34,7 @@ function WorkerStats({ refreshSignal }) {
       <div className="stat-card"><div className="stat-label">Total Stock Units</div><div className="stat-value accent">{stats.totalStock}</div></div>
       <div className="stat-card"><div className="stat-label">Units Sold</div><div className="stat-value">{stats.totalSold}</div></div>
       <div className="stat-card"><div className="stat-label">Outstanding Debt (₦)</div><div className="stat-value red">₦{stats.totalDebt.toLocaleString()}</div></div>
-      <div className="stat-card" style={{ borderColor: stats.lowStock > 0 ? 'var(--red)' : 'var(--border)' }}>
+      <div className="stat-card" style={{ border: stats.lowStock > 0 ? '2px solid var(--red)' : '2px solid #000000' }}>
         <div className="stat-label">Low Stock Items</div><div className="stat-value red">{stats.lowStock}</div>
       </div>
     </div>
